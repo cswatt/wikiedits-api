@@ -26,6 +26,27 @@ def _validate_date(date_string):
   except (ValueError, TypeError):
     raise ValueError(f"Invalid date format: {date_string}. Expected YYYYMMDD or parseable date string.")
 
+def _split_date(date_string):
+  """
+  Split date string into year, month, day tuple.
+  
+  Args:
+    date_string: Date in any parseable format
+    
+  Returns:
+    tuple: (year, month, day) in YYYY, MM, DD format
+  """
+  try:
+    if len(date_string) == 8 and date_string.isdigit():
+      # if already in YYYYMMDD format, split directly
+      return (date_string[:4], date_string[4:6], date_string[6:8])
+    
+    # otherwise, parse and return formatted components
+    parsed_date = date_parse(date_string)
+    return (parsed_date.strftime("%Y"), parsed_date.strftime("%m"), parsed_date.strftime("%d"))
+  except (ValueError, TypeError):
+    raise ValueError(f"Invalid date format: {date_string}. Expected YYYYMMDD or parseable date string.")
+  
 def _make_request(endpoint, args, api_base_url=BASE_URL):
   url = "/".join([api_base_url, endpoint, args])
   
@@ -189,5 +210,22 @@ def edited_pages(project, start, end,
                       granularity=granularity,
                       start=start,
                       end=end)
+  
+  return _make_request(endpoint, args)
+
+def most_edited_net(project, date,
+                    editor_type='all-editor-types', page_type='all-page-types'):
+
+  year, month, day = _split_date(date)
+
+  endpoint = "edited-pages/top-by-net-bytes-difference"
+  _args = "{project}/{editor_type}/{page_type}/{year}/{month}/{day}"
+
+  args = _args.format(project=project,
+                      editor_type=editor_type,
+                      page_type=page_type,
+                      year=year,
+                      month=month,
+                      day=day)
   
   return _make_request(endpoint, args)
