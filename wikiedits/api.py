@@ -48,11 +48,27 @@ def _split_date(date_string):
     raise ValueError(f"Invalid date format: {date_string}. Expected YYYYMMDD or parseable date string.")
   
 def _make_request(endpoint, args, api_base_url=BASE_URL):
+  """
+  Make HTTP request to Wikimedia API endpoint with error handling.
+  
+  Args:
+    endpoint: API endpoint path (e.g. 'edits/aggregate')
+    args: Formatted URL path arguments
+    api_base_url: Base URL for the API (defaults to Wikimedia REST API)
+    
+  Returns:
+    dict: JSON response from the API
+    
+  Raises:
+    requests.exceptions.RequestException: For all request-related errors
+  """
+  # Construct full URL by joining base URL, endpoint, and arguments
   url = "/".join([api_base_url, endpoint, args])
   
   try:
+    # Make GET request with default headers and 30 second timeout
     response = requests.get(url, headers=DEFAULT_HEADERS, timeout=30)
-    response.raise_for_status()
+    response.raise_for_status()  # Raise exception for HTTP error status codes
     return response.json()
   except requests.exceptions.Timeout:
     raise requests.exceptions.RequestException(f"Request timed out for URL: {url}")
@@ -84,8 +100,8 @@ def edits_aggregate(project, granularity, start, end,
   response = _make_request(endpoint, args)
   return response['items'][0]['results']
 
-def edits_per_page(project, page_title, start, end,
-                   editor_type='all-editor-types', page_type='all-page-types', granularity='daily'):
+def edits_per_page(project, page_title, granularity, start, end,
+                   editor_type='all-editor-types', page_type='all-page-types'):
 
   start = _validate_date(start)
   end = _validate_date(end)
@@ -101,10 +117,11 @@ def edits_per_page(project, page_title, start, end,
                       start=start,
                       end=end)
 
-  return _make_request(endpoint, args)
+  response = _make_request(endpoint, args)
+  return response['items'][0]['results']
 
-def net_change_aggregate(project, start, end,
-                         editor_type='all-editor-types', page_type='all-page-types', granularity='daily'):
+def net_change_aggregate(project, granularity, start, end,
+                         editor_type='all-editor-types', page_type='all-page-types'):
 
   start = _validate_date(start)
   end = _validate_date(end)
@@ -119,10 +136,11 @@ def net_change_aggregate(project, start, end,
                       start=start,
                       end=end)
 
-  return _make_request(endpoint, args)
+  response = _make_request(endpoint, args)
+  return response['items'][0]['results']
 
-def net_change_per_page(project, page_title, start, end,
-                        editor_type='all-editor-types', page_type='all-page-types', granularity='daily'):
+def net_change_per_page(project, page_title, granularity, start, end,
+                        editor_type='all-editor-types', page_type='all-page-types'):
 
   start = _validate_date(start)
   end = _validate_date(end)
@@ -138,10 +156,11 @@ def net_change_per_page(project, page_title, start, end,
                       start=start,
                       end=end)
 
-  return _make_request(endpoint, args)
+  response = _make_request(endpoint, args)
+  return response['items'][0]['results']
 
-def abs_change_aggregate(project, start, end,
-                         editor_type='all-editor-types', page_type='all-page-types', granularity='daily'):
+def abs_change_aggregate(project, granularity, start, end,
+                         editor_type='all-editor-types', page_type='all-page-types'):
 
   start = _validate_date(start)
   end = _validate_date(end)
@@ -156,10 +175,11 @@ def abs_change_aggregate(project, start, end,
                       start=start,
                       end=end)
 
-  return _make_request(endpoint, args)
+  response = _make_request(endpoint, args)
+  return response['items'][0]['results']
 
-def abs_change_per_page(project, page_title, start, end,
-                        editor_type='all-editor-types', page_type='all-page-types', granularity='daily'):
+def abs_change_per_page(project, page_title, granularity, start, end,
+                        editor_type='all-editor-types', page_type='all-page-types'):
 
   start = _validate_date(start)
   end = _validate_date(end)
@@ -175,10 +195,11 @@ def abs_change_per_page(project, page_title, start, end,
                       start=start,
                       end=end)
 
-  return _make_request(endpoint, args)
+  response = _make_request(endpoint, args)
+  return response['items'][0]['results']
   
-def new_pages(project, start, end,
-              editor_type='all-editor-types', page_type='all-page-types', granularity='daily'):
+def new_pages(project, granularity, start, end,
+              editor_type='all-editor-types', page_type='all-page-types'):
 
   start = _validate_date(start)
   end = _validate_date(end)
@@ -193,10 +214,11 @@ def new_pages(project, start, end,
                       start=start,
                       end=end)
   
-  return _make_request(endpoint, args)
+  response = _make_request(endpoint, args)
+  return response['items'][0]['results']
 
-def edited_pages(project, start, end,
-                 editor_type='all-editor-types', page_type='all-page-types', activity_level='all-activity-levels', granularity='daily'):
+def edited_pages(project, granularity, start, end,
+                 editor_type='all-editor-types', page_type='all-page-types', activity_level='all-activity-levels'):
 
   start = _validate_date(start)
   end = _validate_date(end)
@@ -212,9 +234,10 @@ def edited_pages(project, start, end,
                       start=start,
                       end=end)
   
-  return _make_request(endpoint, args)
+  response = _make_request(endpoint, args)
+  return response['items'][0]['results']
 
-def most_edited_net(project, date,
+def top_by_net_diff(project, date,
                     editor_type='all-editor-types', page_type='all-page-types'):
 
   year, month, day = _split_date(date)
@@ -229,4 +252,41 @@ def most_edited_net(project, date,
                       month=month,
                       day=day)
   
-  return _make_request(endpoint, args)
+  response = _make_request(endpoint, args)
+  return response['items'][0]['results'][0]['top']
+
+def top_by_abs_diff(project, date,
+                    editor_type='all-editor-types', page_type='all-page-types'):
+
+  year, month, day = _split_date(date)
+
+  endpoint = "edited-pages/top-by-absolute-bytes-difference"
+  _args = "{project}/{editor_type}/{page_type}/{year}/{month}/{day}"
+
+  args = _args.format(project=project,
+                      editor_type=editor_type,
+                      page_type=page_type,
+                      year=year,
+                      month=month,
+                      day=day)
+  
+  response = _make_request(endpoint, args)
+  return response['items'][0]['results'][0]['top']
+
+def top_by_edits(project, date,
+                    editor_type='all-editor-types', page_type='all-page-types'):
+
+  year, month, day = _split_date(date)
+
+  endpoint = "edited-pages/top-by-edits"
+  _args = "{project}/{editor_type}/{page_type}/{year}/{month}/{day}"
+
+  args = _args.format(project=project,
+                      editor_type=editor_type,
+                      page_type=page_type,
+                      year=year,
+                      month=month,
+                      day=day)
+  
+  response = _make_request(endpoint, args)
+  return response['items'][0]['results'][0]['top']

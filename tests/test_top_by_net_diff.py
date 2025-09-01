@@ -1,24 +1,28 @@
 import unittest
 from unittest.mock import patch, Mock
-from wikiedits.api import most_edited_net
+from wikiedits.api import top_by_net_diff
 
 
-class TestMostEditedNet(unittest.TestCase):
+class TestTopByNetDiff(unittest.TestCase):
     
     @patch('wikiedits.api.requests.get')
-    def test_most_edited_net_basic(self, mock_get):
-        """Test basic most edited net functionality"""
+    def test_top_by_net_diff_basic(self, mock_get):
+        """Test basic top by net diff functionality"""
         mock_response = Mock()
         mock_response.json.return_value = {
-            'items': [
-                {'project': 'en.wikipedia', 'page_title': 'Python', 'net_bytes_diff': 5000, 'rank': 1},
-                {'project': 'en.wikipedia', 'page_title': 'JavaScript', 'net_bytes_diff': 4500, 'rank': 2}
-            ]
+            'items': [{
+                'results': [{
+                    'top': [
+                        {'project': 'en.wikipedia', 'page_title': 'Python', 'net_bytes_diff': 5000, 'rank': 1},
+                        {'project': 'en.wikipedia', 'page_title': 'JavaScript', 'net_bytes_diff': 4500, 'rank': 2}
+                    ]
+                }]
+            }]
         }
         mock_response.raise_for_status = Mock()
         mock_get.return_value = mock_response
         
-        result = most_edited_net('en.wikipedia', '20240315')
+        result = top_by_net_diff('en.wikipedia', '20240315')
         
         mock_get.assert_called_once_with(
             'https://wikimedia.org/api/rest_v1/metrics/edited-pages/top-by-net-bytes-difference/en.wikipedia/all-editor-types/all-page-types/2024/03/15',
@@ -28,18 +32,18 @@ class TestMostEditedNet(unittest.TestCase):
             },
             timeout=30
         )
-        self.assertEqual(result['items'][0]['net_bytes_diff'], 5000)
-        self.assertEqual(result['items'][1]['net_bytes_diff'], 4500)
+        self.assertEqual(result[0]['net_bytes_diff'], 5000)
+        self.assertEqual(result[1]['net_bytes_diff'], 4500)
     
     @patch('wikiedits.api.requests.get')
-    def test_most_edited_net_with_custom_parameters(self, mock_get):
+    def test_top_by_net_diff_with_custom_parameters(self, mock_get):
         """Test most edited net with custom parameters"""
         mock_response = Mock()
-        mock_response.json.return_value = {'items': []}
+        mock_response.json.return_value = {'items': [{'results': [{'top': []}]}]}
         mock_response.raise_for_status = Mock()
         mock_get.return_value = mock_response
         
-        most_edited_net(
+        top_by_net_diff(
             'fr.wikipedia',
             '20240415',
             editor_type='user',
@@ -56,14 +60,14 @@ class TestMostEditedNet(unittest.TestCase):
         )
     
     @patch('wikiedits.api.requests.get')
-    def test_most_edited_net_with_default_parameters(self, mock_get):
+    def test_top_by_net_diff_with_default_parameters(self, mock_get):
         """Test most edited net with default parameters"""
         mock_response = Mock()
-        mock_response.json.return_value = {'items': []}
+        mock_response.json.return_value = {'items': [{'results': [{'top': []}]}]}
         mock_response.raise_for_status = Mock()
         mock_get.return_value = mock_response
         
-        most_edited_net('es.wikipedia', '20240201')
+        top_by_net_diff('es.wikipedia', '20240201')
         
         expected_url = 'https://wikimedia.org/api/rest_v1/metrics/edited-pages/top-by-net-bytes-difference/es.wikipedia/all-editor-types/all-page-types/2024/02/01'
         mock_get.assert_called_once_with(
@@ -76,14 +80,14 @@ class TestMostEditedNet(unittest.TestCase):
         )
     
     @patch('wikiedits.api.requests.get')
-    def test_most_edited_net_iso_date_format(self, mock_get):
+    def test_top_by_net_diff_iso_date_format(self, mock_get):
         """Test most edited net with ISO date format"""
         mock_response = Mock()
-        mock_response.json.return_value = {'items': []}
+        mock_response.json.return_value = {'items': [{'results': [{'top': []}]}]}
         mock_response.raise_for_status = Mock()
         mock_get.return_value = mock_response
         
-        most_edited_net('de.wikipedia', '2024-06-20')
+        top_by_net_diff('de.wikipedia', '2024-06-20')
         
         mock_get.assert_called_once_with(
             'https://wikimedia.org/api/rest_v1/metrics/edited-pages/top-by-net-bytes-difference/de.wikipedia/all-editor-types/all-page-types/2024/06/20',
@@ -95,14 +99,14 @@ class TestMostEditedNet(unittest.TestCase):
         )
     
     @patch('wikiedits.api.requests.get')
-    def test_most_edited_net_slash_date_format(self, mock_get):
+    def test_top_by_net_diff_slash_date_format(self, mock_get):
         """Test most edited net with MM/DD/YYYY date format"""
         mock_response = Mock()
-        mock_response.json.return_value = {'items': []}
+        mock_response.json.return_value = {'items': [{'results': [{'top': []}]}]}
         mock_response.raise_for_status = Mock()
         mock_get.return_value = mock_response
         
-        most_edited_net('it.wikipedia', '07/25/2024')
+        top_by_net_diff('it.wikipedia', '07/25/2024')
         
         mock_get.assert_called_once_with(
             'https://wikimedia.org/api/rest_v1/metrics/edited-pages/top-by-net-bytes-difference/it.wikipedia/all-editor-types/all-page-types/2024/07/25',
@@ -114,14 +118,14 @@ class TestMostEditedNet(unittest.TestCase):
         )
     
     @patch('wikiedits.api.requests.get')
-    def test_most_edited_net_text_date_format(self, mock_get):
+    def test_top_by_net_diff_text_date_format(self, mock_get):
         """Test most edited net with text date format"""
         mock_response = Mock()
-        mock_response.json.return_value = {'items': []}
+        mock_response.json.return_value = {'items': [{'results': [{'top': []}]}]}
         mock_response.raise_for_status = Mock()
         mock_get.return_value = mock_response
         
-        most_edited_net('pt.wikipedia', 'August 10, 2024')
+        top_by_net_diff('pt.wikipedia', 'August 10, 2024')
         
         mock_get.assert_called_once_with(
             'https://wikimedia.org/api/rest_v1/metrics/edited-pages/top-by-net-bytes-difference/pt.wikipedia/all-editor-types/all-page-types/2024/08/10',
@@ -134,15 +138,15 @@ class TestMostEditedNet(unittest.TestCase):
     
     @patch('wikiedits.api._split_date')
     @patch('wikiedits.api.requests.get')
-    def test_most_edited_net_date_splitting(self, mock_get, mock_split):
+    def test_top_by_net_diff_date_splitting(self, mock_get, mock_split):
         """Test that date splitting is called correctly"""
         mock_response = Mock()
-        mock_response.json.return_value = {'items': []}
+        mock_response.json.return_value = {'items': [{'results': [{'top': []}]}]}
         mock_response.raise_for_status = Mock()
         mock_get.return_value = mock_response
         mock_split.return_value = ('2024', '09', '15')
         
-        most_edited_net('en.wikipedia', '2024-09-15')
+        top_by_net_diff('en.wikipedia', '2024-09-15')
         
         mock_split.assert_called_once_with('2024-09-15')
         mock_get.assert_called_once_with(
@@ -154,25 +158,25 @@ class TestMostEditedNet(unittest.TestCase):
             timeout=30
         )
     
-    def test_most_edited_net_invalid_date(self):
+    def test_top_by_net_diff_invalid_date(self):
         """Test most edited net with invalid date format"""
         with self.assertRaises(ValueError) as context:
-            most_edited_net('en.wikipedia', 'invalid-date')
+            top_by_net_diff('en.wikipedia', 'invalid-date')
         
         self.assertIn('Invalid date format', str(context.exception))
         self.assertIn('invalid-date', str(context.exception))
     
-    def test_most_edited_net_none_date(self):
+    def test_top_by_net_diff_none_date(self):
         """Test most edited net with None date"""
         with self.assertRaises(ValueError) as context:
-            most_edited_net('en.wikipedia', None)
+            top_by_net_diff('en.wikipedia', None)
         
         self.assertIn('Invalid date format', str(context.exception))
     
-    def test_most_edited_net_empty_date(self):
+    def test_top_by_net_diff_empty_date(self):
         """Test most edited net with empty date string"""
         with self.assertRaises(ValueError) as context:
-            most_edited_net('en.wikipedia', '')
+            top_by_net_diff('en.wikipedia', '')
         
         self.assertIn('Invalid date format', str(context.exception))
 

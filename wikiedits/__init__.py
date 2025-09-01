@@ -7,6 +7,9 @@ from .api import (
   abs_change_per_page,
   new_pages,
   edited_pages,
+  top_by_net_diff,
+  top_by_abs_diff,
+  top_by_edits,
   __version__
 )
 
@@ -18,5 +21,8 @@ __all__ = [
   "abs_change_aggregate",
   "abs_change_per_page",
   "new_pages",
-  "edited_pages"
+  "edited_pages",
+  "top_by_net_diff",
+  "top_by_abs_diff",
+  "top_by_edits"
 ]

@@ -10,15 +10,17 @@ class TestEditedPages(unittest.TestCase):
         """Test basic edited pages functionality"""
         mock_response = Mock()
         mock_response.json.return_value = {
-            'items': [
-                {'project': 'en.wikipedia', 'edited_pages': 2500, 'timestamp': '20240101'},
-                {'project': 'en.wikipedia', 'edited_pages': 2800, 'timestamp': '20240102'}
-            ]
+            'items': [{
+                'results': [
+                    {'project': 'en.wikipedia', 'edited_pages': 2500, 'timestamp': '20240101'},
+                    {'project': 'en.wikipedia', 'edited_pages': 2800, 'timestamp': '20240102'}
+                ]
+            }]
         }
         mock_response.raise_for_status = Mock()
         mock_get.return_value = mock_response
         
-        result = edited_pages('en.wikipedia', '20240101', '20240102')
+        result = edited_pages('en.wikipedia', 'daily', '20240101', '20240102')
         
         mock_get.assert_called_once_with(
             'https://wikimedia.org/api/rest_v1/metrics/edited-pages/aggregate/en.wikipedia/all-editor-types/all-page-types/all-activity-levels/daily/20240101/20240102',
@@ -28,25 +30,25 @@ class TestEditedPages(unittest.TestCase):
             },
             timeout=30
         )
-        self.assertEqual(result['items'][0]['edited_pages'], 2500)
-        self.assertEqual(result['items'][1]['edited_pages'], 2800)
+        self.assertEqual(result[0]['edited_pages'], 2500)
+        self.assertEqual(result[1]['edited_pages'], 2800)
     
     @patch('wikiedits.api.requests.get')
     def test_edited_pages_with_custom_parameters(self, mock_get):
         """Test edited pages with all custom parameters"""
         mock_response = Mock()
-        mock_response.json.return_value = {'items': []}
+        mock_response.json.return_value = {'items': [{'results': []}]}
         mock_response.raise_for_status = Mock()
         mock_get.return_value = mock_response
         
         edited_pages(
             'de.wikipedia',
+            'monthly',
             '20240101',
             '20240105',
             editor_type='user',
             page_type='content',
-            activity_level='1..4-edits',
-            granularity='monthly'
+            activity_level='1..4-edits'
         )
         
         mock_get.assert_called_once_with(
@@ -62,11 +64,11 @@ class TestEditedPages(unittest.TestCase):
     def test_edited_pages_with_default_parameters(self, mock_get):
         """Test edited pages with default parameters"""
         mock_response = Mock()
-        mock_response.json.return_value = {'items': []}
+        mock_response.json.return_value = {'items': [{'results': []}]}
         mock_response.raise_for_status = Mock()
         mock_get.return_value = mock_response
         
-        edited_pages('fr.wikipedia', '20240201', '20240228')
+        edited_pages('fr.wikipedia', 'daily', '20240201', '20240228')
         
         expected_url = 'https://wikimedia.org/api/rest_v1/metrics/edited-pages/aggregate/fr.wikipedia/all-editor-types/all-page-types/all-activity-levels/daily/20240201/20240228'
         mock_get.assert_called_once_with(
@@ -82,12 +84,13 @@ class TestEditedPages(unittest.TestCase):
     def test_edited_pages_with_partial_custom_parameters(self, mock_get):
         """Test edited pages with some custom parameters"""
         mock_response = Mock()
-        mock_response.json.return_value = {'items': []}
+        mock_response.json.return_value = {'items': [{'results': []}]}
         mock_response.raise_for_status = Mock()
         mock_get.return_value = mock_response
         
         edited_pages(
             'es.wikipedia',
+            'daily',
             '20240301',
             '20240331',
             activity_level='5..24-edits'
@@ -108,12 +111,12 @@ class TestEditedPages(unittest.TestCase):
     def test_edited_pages_date_validation(self, mock_get, mock_validate):
         """Test that date validation is called"""
         mock_response = Mock()
-        mock_response.json.return_value = {'items': []}
+        mock_response.json.return_value = {'items': [{'results': []}]}
         mock_response.raise_for_status = Mock()
         mock_get.return_value = mock_response
         mock_validate.side_effect = ['20240101', '20240102']
         
-        edited_pages('en.wikipedia', '2024-01-01', '2024-01-02')
+        edited_pages('en.wikipedia', 'daily', '2024-01-01', '2024-01-02')
         
         self.assertEqual(mock_validate.call_count, 2)
         mock_validate.assert_any_call('2024-01-01')
