@@ -44,7 +44,7 @@ def _make_request(endpoint, args, api_base_url=BASE_URL):
   except requests.exceptions.RequestException as e:
     raise requests.exceptions.RequestException(f"Request failed: {str(e)}")
 
-def aggregate_edits(project, start, end,
+def edits_aggregate(project, start, end,
                     editor_type='all-editor-types', page_type='all-page-types', granularity='daily'):
 
   start = _validate_date(start)
@@ -62,6 +62,99 @@ def aggregate_edits(project, start, end,
 
   return _make_request(endpoint, args)
 
+def edits_per_page(project, page_title, start, end,
+                   editor_type='all-editor-types', page_type='all-page-types', granularity='daily'):
+
+  start = _validate_date(start)
+  end = _validate_date(end)
+
+  endpoint = "edits/per-page"
+  _args = "{project}/{page_title}/{editor_type}/{page_type}/{granularity}/{start}/{end}"
+
+  args = _args.format(project=project,
+                      page_title=page_title,
+                      editor_type=editor_type,
+                      page_type=page_type,
+                      granularity=granularity,
+                      start=start,
+                      end=end)
+
+  return _make_request(endpoint, args)
+
+def net_change_aggregate(project, start, end,
+                         editor_type='all-editor-types', page_type='all-page-types', granularity='daily'):
+
+  start = _validate_date(start)
+  end = _validate_date(end)
+
+  endpoint = "bytes-difference/net/aggregate"
+  _args = "{project}/{editor_type}/{page_type}/{granularity}/{start}/{end}"
+
+  args = _args.format(project=project,
+                      editor_type=editor_type,
+                      page_type=page_type,
+                      granularity=granularity,
+                      start=start,
+                      end=end)
+
+  return _make_request(endpoint, args)
+
+def net_change_per_page(project, page_title, start, end,
+                        editor_type='all-editor-types', page_type='all-page-types', granularity='daily'):
+
+  start = _validate_date(start)
+  end = _validate_date(end)
+
+  endpoint = "bytes-difference/net/per-page"
+  _args = "{project}/{page_title}/{editor_type}/{page_type}/{granularity}/{start}/{end}"
+
+  args = _args.format(project=project,
+                      page_title=page_title,
+                      editor_type=editor_type,
+                      page_type=page_type,
+                      granularity=granularity,
+                      start=start,
+                      end=end)
+
+  return _make_request(endpoint, args)
+
+def abs_change_aggregate(project, start, end,
+                         editor_type='all-editor-types', page_type='all-page-types', granularity='daily'):
+
+  start = _validate_date(start)
+  end = _validate_date(end)
+
+  endpoint = "bytes-difference/absolute/aggregate"
+  _args = "{project}/{editor_type}/{page_type}/{granularity}/{start}/{end}"
+
+  args = _args.format(project=project,
+                      editor_type=editor_type,
+                      page_type=page_type,
+                      granularity=granularity,
+                      start=start,
+                      end=end)
+
+  return _make_request(endpoint, args)
+
+def abs_change_per_page(project, page_title, start, end,
+                        editor_type='all-editor-types', page_type='all-page-types', granularity='daily'):
+
+  start = _validate_date(start)
+  end = _validate_date(end)
+
+  endpoint = "bytes-difference/absolute/per-page"
+  _args = "{project}/{page_title}/{editor_type}/{page_type}/{granularity}/{start}/{end}"
+
+  args = _args.format(project=project,
+                      page_title=page_title,
+                      editor_type=editor_type,
+                      page_type=page_type,
+                      granularity=granularity,
+                      start=start,
+                      end=end)
+
+  return _make_request(endpoint, args)
+  
 def new_pages(project, start, end,
               editor_type='all-editor-types', page_type='all-page-types', granularity='daily'):
 
@@ -79,4 +172,22 @@ def new_pages(project, start, end,
                       end=end)
   
   return _make_request(endpoint, args)
+
+def edited_pages(project, start, end,
+                 editor_type='all-editor-types', page_type='all-page-types', activity_level='all-activity-levels', granularity='daily'):
+
+  start = _validate_date(start)
+  end = _validate_date(end)
+
+  endpoint = "edited-pages/aggregate"
+  _args = "{project}/{editor_type}/{page_type}/{activity_level}/{granularity}/{start}/{end}"
+
+  args = _args.format(project=project,
+                      editor_type=editor_type,
+                      page_type=page_type,
+                      activity_level=activity_level,
+                      granularity=granularity,
+                      start=start,
+                      end=end)
   
+  return _make_request(endpoint, args)

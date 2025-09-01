@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import patch, Mock
-from wikiedits.api import aggregate_edits
+from wikiedits.api import edits_aggregate
 
 
 class TestAggregateEdits(unittest.TestCase):
@@ -16,7 +16,7 @@ class TestAggregateEdits(unittest.TestCase):
         }
         mock_get.return_value = mock_response
         
-        result = aggregate_edits('en.wikipedia', '20240101', '20240102')
+        result = edits_aggregate('en.wikipedia', '20240101', '20240102')
         
         mock_get.assert_called_once_with(
             'https://wikimedia.org/api/rest_v1/metrics/edits/aggregate/en.wikipedia/all-editor-types/all-page-types/daily/20240101/20240102',
@@ -35,7 +35,7 @@ class TestAggregateEdits(unittest.TestCase):
         mock_response.json.return_value = {'items': []}
         mock_get.return_value = mock_response
         
-        aggregate_edits(
+        edits_aggregate(
             'es.wikipedia', 
             '20240101', 
             '20240105',
@@ -59,7 +59,7 @@ class TestAggregateEdits(unittest.TestCase):
         mock_response.json.return_value = {'items': []}
         mock_get.return_value = mock_response
         
-        aggregate_edits('fr.wikipedia', '20240201', '20240228')
+        edits_aggregate('fr.wikipedia', '20240201', '20240228')
         
         expected_url = 'https://wikimedia.org/api/rest_v1/metrics/edits/aggregate/fr.wikipedia/all-editor-types/all-page-types/daily/20240201/20240228'
         mock_get.assert_called_once_with(
