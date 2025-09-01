@@ -65,8 +65,8 @@ def _make_request(endpoint, args, api_base_url=BASE_URL):
   except requests.exceptions.RequestException as e:
     raise requests.exceptions.RequestException(f"Request failed: {str(e)}")
 
-def edits_aggregate(project, start, end,
-                    editor_type='all-editor-types', page_type='all-page-types', granularity='daily'):
+def edits_aggregate(project, granularity, start, end,
+                    editor_type='all-editor-types', page_type='all-page-types'):
 
   start = _validate_date(start)
   end = _validate_date(end)
@@ -81,7 +81,8 @@ def edits_aggregate(project, start, end,
                       start=start,
                       end=end)
 
-  return _make_request(endpoint, args)
+  response = _make_request(endpoint, args)
+  return response['items'][0]['results']
 
 def edits_per_page(project, page_title, start, end,
                    editor_type='all-editor-types', page_type='all-page-types', granularity='daily'):
