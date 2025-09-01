@@ -13,6 +13,7 @@ This is a Python client library for editor analytics from the Wikimedia Analytic
   - `api.py` - Core API client implementation
 - `myenv/` - Python virtual environment (gitignored)
 - `README.md` - Basic project description
+- `tests` - where tests live
 
 ## Development Environment
 
@@ -44,11 +45,8 @@ The library interfaces with the Wikimedia REST API v1 metrics endpoints:
 - Current endpoint: `edited-pages/new` for new page creation data
 
 ## Current Limitations
-
-- No tests present
 - No build/packaging configuration (no setup.py, pyproject.toml, etc.)
-- `_make_request()` currently only prints URLs, doesn't make actual requests
-- No error handling or response processing implemented
+
 
 ## Wikimedia REST API v1
 - This API requires dates to be in YYYYMMDD format
