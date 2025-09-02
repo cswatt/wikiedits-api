@@ -23,7 +23,7 @@ class TestEditsPerPage(unittest.TestCase):
         result = edits_per_page('en.wikipedia', 'Python', 'daily', '20240101', '20240102')
         
         mock_get.assert_called_once_with(
-            'https://wikimedia.org/api/rest_v1/metrics/edits/per-page/en.wikipedia/Python/all-editor-types/all-page-types/daily/20240101/20240102',
+            'https://wikimedia.org/api/rest_v1/metrics/edits/per-page/en.wikipedia/Python/all-editor-types/daily/20240101/20240102',
             headers={
                 'User-Agent': 'wikiedits-api/0.1.0',
                 'Accept': 'application/json'
@@ -47,12 +47,11 @@ class TestEditsPerPage(unittest.TestCase):
             'monthly',
             '20240101',
             '20240105',
-            editor_type='user',
-            page_type='content'
+            editor_type='user'
         )
         
         mock_get.assert_called_once_with(
-            'https://wikimedia.org/api/rest_v1/metrics/edits/per-page/es.wikipedia/Machine_learning/user/content/monthly/20240101/20240105',
+            'https://wikimedia.org/api/rest_v1/metrics/edits/per-page/es.wikipedia/Machine_learning/user/monthly/20240101/20240105',
             headers={
                 'User-Agent': 'wikiedits-api/0.1.0',
                 'Accept': 'application/json'
@@ -70,7 +69,7 @@ class TestEditsPerPage(unittest.TestCase):
         
         edits_per_page('fr.wikipedia', 'Artificial_intelligence', 'daily', '20240201', '20240228')
         
-        expected_url = 'https://wikimedia.org/api/rest_v1/metrics/edits/per-page/fr.wikipedia/Artificial_intelligence/all-editor-types/all-page-types/daily/20240201/20240228'
+        expected_url = 'https://wikimedia.org/api/rest_v1/metrics/edits/per-page/fr.wikipedia/Artificial_intelligence/all-editor-types/daily/20240201/20240228'
         mock_get.assert_called_once_with(
             expected_url,
             headers={

@@ -88,11 +88,11 @@ def _build_standard_args(project: str, editor_type: str, page_type: str, granula
   """
   return f"{project}/{editor_type}/{page_type}/{granularity}/{start}/{end}"
 
-def _build_per_page_args(project: str, page_title: str, editor_type: str, page_type: str, granularity: str, start: str, end: str) -> str:
+def _build_per_page_args(project: str, page_title: str, editor_type: str, granularity: str, start: str, end: str) -> str:
   """
   Build URL arguments for per-page API endpoints.
   """
-  return f"{project}/{page_title}/{editor_type}/{page_type}/{granularity}/{start}/{end}"
+  return f"{project}/{page_title}/{editor_type}/{granularity}/{start}/{end}"
 
 def _build_top_by_args(project: str, editor_type: str, page_type: str, year: str, month: str, day: str) -> str:
   """
@@ -112,13 +112,13 @@ def _make_standard_request(endpoint: str, project: str, granularity: str, start:
   return response['items'][0]['results']
 
 def _make_per_page_request(endpoint: str, project: str, page_title: str, granularity: str, start: str, end: str,
-                          editor_type: str = 'all-editor-types', page_type: str = 'all-page-types') -> List[Dict[str, Any]]:
+                          editor_type: str = 'all-editor-types') -> List[Dict[str, Any]]:
   """
   Make a per-page API request for specific page endpoints.
   """
   start = _validate_date(start)
   end = _validate_date(end)
-  args = _build_per_page_args(project, page_title, editor_type, page_type, granularity, start, end)
+  args = _build_per_page_args(project, page_title, editor_type, granularity, start, end)
   response = _make_request(endpoint, args)
   return response['items'][0]['results']
 
@@ -137,24 +137,24 @@ def edits_aggregate(project: str, granularity: str, start: str, end: str,
   return _make_standard_request("edits/aggregate", project, granularity, start, end, editor_type, page_type)
 
 def edits_per_page(project: str, page_title: str, granularity: str, start: str, end: str,
-                   editor_type: str = 'all-editor-types', page_type: str = 'all-page-types') -> List[Dict[str, Any]]:
-  return _make_per_page_request("edits/per-page", project, page_title, granularity, start, end, editor_type, page_type)
+                   editor_type: str = 'all-editor-types') -> List[Dict[str, Any]]:
+  return _make_per_page_request("edits/per-page", project, page_title, granularity, start, end, editor_type)
 
 def net_change_aggregate(project: str, granularity: str, start: str, end: str,
                          editor_type: str = 'all-editor-types', page_type: str = 'all-page-types') -> List[Dict[str, Any]]:
   return _make_standard_request("bytes-difference/net/aggregate", project, granularity, start, end, editor_type, page_type)
 
 def net_change_per_page(project: str, page_title: str, granularity: str, start: str, end: str,
-                        editor_type: str = 'all-editor-types', page_type: str = 'all-page-types') -> List[Dict[str, Any]]:
-  return _make_per_page_request("bytes-difference/net/per-page", project, page_title, granularity, start, end, editor_type, page_type)
+                        editor_type: str = 'all-editor-types') -> List[Dict[str, Any]]:
+  return _make_per_page_request("bytes-difference/net/per-page", project, page_title, granularity, start, end, editor_type)
 
 def abs_change_aggregate(project: str, granularity: str, start: str, end: str,
                          editor_type: str = 'all-editor-types', page_type: str = 'all-page-types') -> List[Dict[str, Any]]:
   return _make_standard_request("bytes-difference/absolute/aggregate", project, granularity, start, end, editor_type, page_type)
 
 def abs_change_per_page(project: str, page_title: str, granularity: str, start: str, end: str,
-                        editor_type: str = 'all-editor-types', page_type: str = 'all-page-types') -> List[Dict[str, Any]]:
-  return _make_per_page_request("bytes-difference/absolute/per-page", project, page_title, granularity, start, end, editor_type, page_type)
+                        editor_type: str = 'all-editor-types') -> List[Dict[str, Any]]:
+  return _make_per_page_request("bytes-difference/absolute/per-page", project, page_title, granularity, start, end, editor_type)
   
 def new_pages(project: str, granularity: str, start: str, end: str,
               editor_type: str = 'all-editor-types', page_type: str = 'all-page-types') -> List[Dict[str, Any]]:
