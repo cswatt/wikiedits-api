@@ -1,6 +1,6 @@
 import requests
 from typing import Dict, List, Any, Tuple
-from .date_utils import validate_date, split_date
+from .date_utils import validate_dates, split_date
 
 __version__ = "0.1.0"
 
@@ -68,8 +68,7 @@ def _make_standard_request(endpoint: str, project: str, granularity: str, start:
   """
   Make a standard API request for aggregate endpoints.
   """
-  start = validate_date(start)
-  end = validate_date(end)
+  start, end = validate_dates(granularity, start, end)
   args = _build_standard_args(project, editor_type, page_type, granularity, start, end)
   response = _make_request(endpoint, args)
   return response['items'][0]['results']
@@ -79,8 +78,7 @@ def _make_per_page_request(endpoint: str, project: str, page_title: str, granula
   """
   Make a per-page API request for specific page endpoints.
   """
-  start = validate_date(start)
-  end = validate_date(end)
+  start, end = validate_dates(granularity, start, end)
   args = _build_per_page_args(project, page_title, editor_type, granularity, start, end)
   response = _make_request(endpoint, args)
   return response['items'][0]['results']
@@ -126,8 +124,7 @@ def new_pages(project: str, granularity: str, start: str, end: str,
 def edited_pages(project: str, granularity: str, start: str, end: str,
                  editor_type: str = 'all-editor-types', page_type: str = 'all-page-types', 
                  activity_level: str = 'all-activity-levels') -> List[Dict[str, Any]]:
-  start = validate_date(start)
-  end = validate_date(end)
+  start, end = validate_dates(granularity, start, end)
   args = f"{project}/{editor_type}/{page_type}/{activity_level}/{granularity}/{start}/{end}"
   response = _make_request("edited-pages/aggregate", args)
   return response['items'][0]['results']

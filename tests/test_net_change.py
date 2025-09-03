@@ -113,7 +113,7 @@ class TestNetChange(unittest.TestCase):
             timeout=30
         )
     
-    @patch('wikiedits.api.validate_date')
+    @patch('wikiedits.api.validate_dates')
     @patch('wikiedits.api.requests.get')
     def test_net_change_date_validation(self, mock_get, mock_validate):
         """Test that date validation is called for both functions"""
@@ -121,12 +121,12 @@ class TestNetChange(unittest.TestCase):
         mock_response.json.return_value = {'items': [{'results': []}]}
         mock_response.raise_for_status = Mock()
         mock_get.return_value = mock_response
-        mock_validate.side_effect = ['20240101', '20240102', '20240101', '20240102']
+        mock_validate.side_effect = [('20240101', '20240102'), ('20240101', '20240102')]
         
         net_change_aggregate('en.wikipedia', 'daily', '2024-01-01', '2024-01-02')
         net_change_per_page('en.wikipedia', 'Test_page', 'daily', '2024-01-01', '2024-01-02')
         
-        self.assertEqual(mock_validate.call_count, 4)
+        self.assertEqual(mock_validate.call_count, 2)
 
 
 if __name__ == '__main__':
