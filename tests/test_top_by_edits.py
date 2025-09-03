@@ -136,7 +136,7 @@ class TestTopByEdits(unittest.TestCase):
             timeout=30
         )
     
-    @patch('wikiedits.api._split_date')
+    @patch('wikiedits.api.split_date')
     @patch('wikiedits.api.requests.get')
     def test_top_by_edits_date_splitting(self, mock_get, mock_split):
         """Test that date splitting is called correctly"""

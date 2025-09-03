@@ -1,6 +1,6 @@
 import requests
-from dateutil.parser import parse as date_parse
 from typing import Dict, List, Any, Tuple
+from .date_utils import validate_date, split_date
 
 __version__ = "0.1.0"
 
@@ -11,43 +11,6 @@ DEFAULT_HEADERS = {
   "Accept": "application/json"
 }
 
-def _validate_date(date_string: str) -> str:
-  """
-  Validate and normalize date string to YYYYMMDD format.
-  """
-
-  try:
-    if len(date_string) == 8 and date_string.isdigit():
-      # if already in YYYYMMDD format, return
-      return date_string
-
-    # otherwise, parse and return normalized date string
-    parsed_date = date_parse(date_string)
-    return parsed_date.strftime("%Y%m%d")
-  except (ValueError, TypeError):
-    raise ValueError(f"Invalid date format: {date_string}. Expected YYYYMMDD or parseable date string.")
-
-def _split_date(date_string: str) -> Tuple[str, str, str]:
-  """
-  Split date string into year, month, day tuple.
-  
-  Args:
-    date_string: Date in any parseable format
-    
-  Returns:
-    tuple: (year, month, day) in YYYY, MM, DD format
-  """
-  try:
-    if len(date_string) == 8 and date_string.isdigit():
-      # if already in YYYYMMDD format, split directly
-      return (date_string[:4], date_string[4:6], date_string[6:8])
-    
-    # otherwise, parse and return formatted components
-    parsed_date = date_parse(date_string)
-    return (parsed_date.strftime("%Y"), parsed_date.strftime("%m"), parsed_date.strftime("%d"))
-  except (ValueError, TypeError):
-    raise ValueError(f"Invalid date format: {date_string}. Expected YYYYMMDD or parseable date string.")
-  
 def _make_request(endpoint: str, args: str, api_base_url: str = BASE_URL) -> Dict[str, Any]:
   """
   Make HTTP request to Wikimedia API endpoint with error handling.
@@ -105,8 +68,8 @@ def _make_standard_request(endpoint: str, project: str, granularity: str, start:
   """
   Make a standard API request for aggregate endpoints.
   """
-  start = _validate_date(start)
-  end = _validate_date(end)
+  start = validate_date(start)
+  end = validate_date(end)
   args = _build_standard_args(project, editor_type, page_type, granularity, start, end)
   response = _make_request(endpoint, args)
   return response['items'][0]['results']
@@ -116,8 +79,8 @@ def _make_per_page_request(endpoint: str, project: str, page_title: str, granula
   """
   Make a per-page API request for specific page endpoints.
   """
-  start = _validate_date(start)
-  end = _validate_date(end)
+  start = validate_date(start)
+  end = validate_date(end)
   args = _build_per_page_args(project, page_title, editor_type, granularity, start, end)
   response = _make_request(endpoint, args)
   return response['items'][0]['results']
@@ -127,7 +90,7 @@ def _make_top_by_request(endpoint: str, project: str, date: str,
   """
   Make a top-by API request for daily top pages endpoints.
   """
-  year, month, day = _split_date(date)
+  year, month, day = split_date(date)
   args = _build_top_by_args(project, editor_type, page_type, year, month, day)
   response = _make_request(endpoint, args)
   return response['items'][0]['results'][0]['top']
@@ -163,8 +126,8 @@ def new_pages(project: str, granularity: str, start: str, end: str,
 def edited_pages(project: str, granularity: str, start: str, end: str,
                  editor_type: str = 'all-editor-types', page_type: str = 'all-page-types', 
                  activity_level: str = 'all-activity-levels') -> List[Dict[str, Any]]:
-  start = _validate_date(start)
-  end = _validate_date(end)
+  start = validate_date(start)
+  end = validate_date(end)
   args = f"{project}/{editor_type}/{page_type}/{activity_level}/{granularity}/{start}/{end}"
   response = _make_request("edited-pages/aggregate", args)
   return response['items'][0]['results']

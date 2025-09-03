@@ -79,7 +79,7 @@ class TestNewPages(unittest.TestCase):
             timeout=30
         )
     
-    @patch('wikiedits.api._validate_date')
+    @patch('wikiedits.api.validate_date')
     @patch('wikiedits.api.requests.get')
     def test_new_pages_date_validation(self, mock_get, mock_validate):
         """Test that date validation is called"""
