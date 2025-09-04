@@ -97,9 +97,19 @@ def edits_aggregate(project: str, granularity: str, start: str, end: str,
                     editor_type: str = 'all-editor-types', page_type: str = 'all-page-types') -> List[Dict[str, Any]]:
   return _make_standard_request("edits/aggregate", project, granularity, start, end, editor_type, page_type)
 
+def sum_edits_aggregate(project: str, start: str, end: str,
+                        editor_type: str = 'all-editor-types', page_type: str = 'all-page-types') -> int:
+  response = edits_aggregate(project, "daily", start, end, editor_type, page_type)
+  return sum(item['edits'] for item in response)
+
 def edits_per_page(project: str, page_title: str, granularity: str, start: str, end: str,
                    editor_type: str = 'all-editor-types') -> List[Dict[str, Any]]:
   return _make_per_page_request("edits/per-page", project, page_title, granularity, start, end, editor_type)
+
+def sum_edits_per_page(project: str, page_title: str, start: str, end: str,
+                       editor_type: str = 'all-editor-types', page_type: str = 'all-page-types') -> int:
+  response = edits_per_page(project, page_title, "daily", start, end, editor_type, page_type)
+  return sum(item['edits'] for item in response)
 
 def net_change_aggregate(project: str, granularity: str, start: str, end: str,
                          editor_type: str = 'all-editor-types', page_type: str = 'all-page-types') -> List[Dict[str, Any]]:

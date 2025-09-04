@@ -59,6 +59,19 @@ Returns something like:
  {'timestamp': '2024-01-30T00:00:00.000Z', 'edits': 465599}]
 ```
 
+### sum of edits over time, aggregated
+`sum_edits_aggregate(project, start, end, editor_type = 'all-editor-types', page_type = 'all-page-types')`
+
+```
+edits = wikiedits.sum_edits_aggregate(
+    project="en.wikipedia.org",
+    start="20250101",
+    end="20250201"
+)
+```
+
+Returns `6468782`.
+
 ### number of edits over time, per page
 
 `edits_per_page(project, page_title, granularity, start, end, editor_type='all-editor-types')`

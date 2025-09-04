@@ -1,5 +1,6 @@
 from .api import (
   edits_aggregate,
+  sum_edits_aggregate,
   edits_per_page,
   net_change_aggregate,
   net_change_per_page,
@@ -15,6 +16,7 @@ from .api import (
 
 __all__ = [
   "edits_aggregate",
+  "sum_edits_aggregate",
   "edits_per_page",
   "net_change_aggregate",
   "net_change_per_page",
