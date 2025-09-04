@@ -131,6 +131,11 @@ def new_pages(project: str, granularity: str, start: str, end: str,
               editor_type: str = 'all-editor-types', page_type: str = 'all-page-types') -> List[Dict[str, Any]]:
   return _make_standard_request("edited-pages/new", project, granularity, start, end, editor_type, page_type)
 
+def sum_new_pages(project: str, start: str, end: str,
+                  editor_type: str = 'all-editor-types', page_type: str = 'all-page-types') -> int:
+  response = new_pages(project, "daily", start, end, editor_type, page_type)
+  return sum(item['new_pages'] for item in response)
+
 def edited_pages(project: str, granularity: str, start: str, end: str,
                  editor_type: str = 'all-editor-types', page_type: str = 'all-page-types', 
                  activity_level: str = 'all-activity-levels') -> List[Dict[str, Any]]:
@@ -138,6 +143,12 @@ def edited_pages(project: str, granularity: str, start: str, end: str,
   args = f"{project}/{editor_type}/{page_type}/{activity_level}/{granularity}/{start}/{end}"
   response = _make_request("edited-pages/aggregate", args)
   return response['items'][0]['results']
+
+def sum_edited_pages(project: str, start: str, end: str,
+                     editor_type: str = 'all-editor-types', page_type: str = 'all-page-types',
+                     activity_level: str = 'all-activity-levels') -> int:
+  response = edited_pages(project, "daily", start, end, editor_type, page_type)
+  return sum(item['edited_pages'] for item in response)
 
 def top_by_net_diff(project: str, date: str,
                     editor_type: str = 'all-editor-types', page_type: str = 'all-page-types') -> List[Dict[str, Any]]:
