@@ -107,8 +107,8 @@ def edits_per_page(project: str, page_title: str, granularity: str, start: str, 
   return _make_per_page_request("edits/per-page", project, page_title, granularity, start, end, editor_type)
 
 def sum_edits_per_page(project: str, page_title: str, start: str, end: str,
-                       editor_type: str = 'all-editor-types', page_type: str = 'all-page-types') -> int:
-  response = edits_per_page(project, page_title, "daily", start, end, editor_type, page_type)
+                       editor_type: str = 'all-editor-types') -> int:
+  response = edits_per_page(project, page_title, "daily", start, end, editor_type)
   return sum(item['edits'] for item in response)
 
 def net_bytes_diff_aggregate(project: str, granularity: str, start: str, end: str,

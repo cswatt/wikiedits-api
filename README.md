@@ -157,7 +157,7 @@ Returns something like:
 ```
 
 ### sum_edited_pages
-`sum_edited_pages(project, start, endeditor_type='all-editor-types', page_type='all-page-types', activity_level='all-activity-levels')`
+`sum_edited_pages(project, start, end, editor_type='all-editor-types', page_type='all-page-types', activity_level='all-activity-levels')`
 
 Sum of edited pages in a provided time frame. Use `activity_level` to specify a certain number of edits.
 

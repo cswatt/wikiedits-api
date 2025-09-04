@@ -21,8 +21,7 @@ class TestSumEditsPerPage(unittest.TestCase):
             'daily', 
             '20240101', 
             '20240102',
-            'all-editor-types',
-            'all-page-types'
+            'all-editor-types'
         )
         self.assertEqual(result, 55)
     
@@ -39,8 +38,7 @@ class TestSumEditsPerPage(unittest.TestCase):
             'Madrid',
             '20240201',
             '20240202',
-            editor_type='user',
-            page_type='content'
+            editor_type='user'
         )
         
         mock_edits_per_page.assert_called_once_with(
@@ -49,8 +47,7 @@ class TestSumEditsPerPage(unittest.TestCase):
             'daily',
             '20240201',
             '20240202',
-            'user',
-            'content'
+            'user'
         )
         self.assertEqual(result, 25)
     
