@@ -111,12 +111,12 @@ def sum_edits_per_page(project: str, page_title: str, start: str, end: str,
   response = edits_per_page(project, page_title, "daily", start, end, editor_type, page_type)
   return sum(item['edits'] for item in response)
 
-def net_change_aggregate(project: str, granularity: str, start: str, end: str,
-                         editor_type: str = 'all-editor-types', page_type: str = 'all-page-types') -> List[Dict[str, Any]]:
+def net_bytes_diff_aggregate(project: str, granularity: str, start: str, end: str,
+                             editor_type: str = 'all-editor-types', page_type: str = 'all-page-types') -> List[Dict[str, Any]]:
   return _make_standard_request("bytes-difference/net/aggregate", project, granularity, start, end, editor_type, page_type)
 
-def net_change_per_page(project: str, page_title: str, granularity: str, start: str, end: str,
-                        editor_type: str = 'all-editor-types') -> List[Dict[str, Any]]:
+def net_bytes_diff_per_page(project: str, page_title: str, granularity: str, start: str, end: str,
+                            editor_type: str = 'all-editor-types') -> List[Dict[str, Any]]:
   return _make_per_page_request("bytes-difference/net/per-page", project, page_title, granularity, start, end, editor_type)
 
 def abs_change_aggregate(project: str, granularity: str, start: str, end: str,

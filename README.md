@@ -34,20 +34,10 @@ print(edits)
 
 ## Functions
 
-### number of edits over time, aggregated
+### edits_aggregate
 `edits_aggregate(project, granularity, start, end, editor_type='all-editor-types', page_type='all-page-types')`
 
 Aggregated edit counts over time.
-
-```python
-# Daily edit counts for English Wikipedia
-edits = wikiedits.edits_aggregate(
-    project="en.wikipedia.org",
-    granularity="daily",
-    start="20240101",
-    end="20240131"
-)
-```
 
 Returns something like:
 
@@ -59,35 +49,17 @@ Returns something like:
  {'timestamp': '2024-01-30T00:00:00.000Z', 'edits': 465599}]
 ```
 
-### sum of edits over time, aggregated
+### sum_edits_aggregate
 `sum_edits_aggregate(project, start, end, editor_type = 'all-editor-types', page_type = 'all-page-types')`
 
-```
-edits = wikiedits.sum_edits_aggregate(
-    project="en.wikipedia.org",
-    start="20250101",
-    end="20250201"
-)
-```
+A sum of all edits over a period of time.
 
-Returns `6468782`.
+Returns an integer like `6468782`.
 
-### number of edits over time, per page
-
+### edits_per_page
 `edits_per_page(project, page_title, granularity, start, end, editor_type='all-editor-types')`
 
 Edit counts over time, for a specific page.
-
-```python
-# Edits to "Climate change" article
-edits = wikiedits.edits_per_page(
-    project="en.wikipedia.org",
-    page_title="Climate_change",
-    granularity="daily", 
-    start="20240101",
-    end="20240131"
-)
-```
 
 Returns something like:
 
@@ -99,21 +71,17 @@ Returns something like:
  {'timestamp': '2024-01-29T00:00:00.000Z', 'edits': 2}]
 ```
 
-### net change, in bytes, aggregated
+### sum_edits_per_page
+`sum_edits_per_page(project, page_title, start, end, editor_type = 'all-editor-types', page_type = 'all-page-types')`
 
-`net_change_aggregate(project, granularity, start, end, editor_type='all-editor-types', page_type='all-page-types')`
+Summed edit counts of a page over a period of time.
+
+Returns an integer.
+
+### net_bytes_diff_aggregate
+`net_bytes_diff_aggregate(project, granularity, start, end, editor_type='all-editor-types', page_type='all-page-types')`
 
 Net byte changes (additions minus deletions) over time.
-
-```python
-# Net content changes across all pages
-changes = wikiedits.net_change_aggregate(
-    project="en.wikipedia.org",
-    granularity="daily",
-    start="2024-01-01", 
-    end="2024-01-31"
-)
-```
 
 Returns something like:
 
@@ -125,20 +93,11 @@ Returns something like:
 {'timestamp': '2024-01-30T00:00:00.000Z', 'net_bytes_diff': 27934337}]
 ```
 
-### net change, in bytes, per page 
+### net_bytes_diff_per_page
 
-`net_change_per_page(project, page_title, granularity, start, end, editor_type='all-editor-types')`
+`net_bytes_diff_per_page(project, page_title, granularity, start, end, editor_type='all-editor-types')`
 
-Get net byte changes for a specific page.
-
-```
-changes = wikiedits.net_change_per_page(
-    project="en.wikipedia.org",
-    page_title="Climate_change",
-    granularity="daily",
-    start="2024-01-01", 
-    end="2024-01-31")
-```
+Net byte changes (additions minus deletions) for a specific page, over time.
 
 Returns something like:
 
@@ -150,31 +109,20 @@ Returns something like:
  {'timestamp': '2024-01-29T00:00:00.000Z', 'net_bytes_diff': -191}]
 ```
 
-### absolute change, in bytes, aggregated 
+### abs_change_aggregate 
 `abs_change_aggregate(project, granularity, start, end, editor_type='all-editor-types', page_type='all-page-types')`
 
 Get absolute byte changes (total additions + deletions) over time.
 
-### absolute change, in bytes, per page
+### abs_change_per_page
 `abs_change_per_page(project, page_title, granularity, start, end, editor_type='all-editor-types')`
 
-Get absolute byte changes for a specific page.
+Get absolute byte changes (additions + deletions) for a specific page.
 
-### number of new pages
+### new_pages
 `new_pages(project, granularity, start, end, editor_type='all-editor-types', page_type='all-page-types')`
 
 Get counts of newly created pages.
-
-```python
-# New articles created each day
-new_pages = wikiedits.new_pages(
-    project="en.wikipedia.org",
-    granularity="daily",
-    start="2024-01-01",
-    end="2024-01-31",
-    page_type="content"  # Only content pages (articles)
-)
-```
 
 Returns something like:
 
@@ -186,20 +134,17 @@ Returns something like:
  {'timestamp': '2024-01-30T00:00:00.000Z', 'new_pages': 488}]
 ```
 
-### number of edited pages
+### sum_new_pages
+`sum_new_pages(project, start, end, editor_type='all-editor-types', page_type='all-page-types')`
+
+Sum of all new pages in a provided time frame.
+
+Returns an integer.
+
+### edited_pages
 `edited_pages(project, granularity, start, end, editor_type='all-editor-types', page_type='all-page-types', activity_level='all-activity-levels')`
 
 Get counts of pages that were edited.
-
-```python
-# Pages edited each day
-edited = wikiedits.edited_pages(
-    project="en.wikipedia.org",
-    granularity="daily",
-    start="2024-01-01", 
-    end="2024-01-31"
-)
-```
 
 Returns something like:
 
@@ -210,7 +155,13 @@ Returns something like:
  ...
  {'timestamp': '2024-01-30T00:00:00.000Z', 'edited_pages': 384863}]
 ```
-### top edited pages, by edits 
+
+### sum_edited_pages
+`sum_edited_pages(project, start, endeditor_type='all-editor-types', page_type='all-page-types', activity_level='all-activity-levels')`
+
+Sum of edited pages in a provided time frame. Use `activity_level` to specify a certain number of edits.
+
+### top_by_edits
 `top_by_edits(project, date, editor_type='all-editor-types', page_type='all-page-types')`
 
 Get pages with the most edits on a specific day.
@@ -234,12 +185,12 @@ Returns something like:
  {'page_title': '2023_Terengganu_FC_season', 'edits': 26, 'rank': 100}]
 ```
 
-### top edited pages, by net content change
+### top_by_net_diff
 `top_by_net_diff(project, date, editor_type='all-editor-types', page_type='all-page-types')`
 
 Get pages with the largest net content changes.
 
-### top edited pages, by absolute content change 
+### top_by_abs_diff
 `top_by_abs_diff(project, date, editor_type='all-editor-types', page_type='all-page-types')`
 
 Get pages with the largest absolute content changes.
@@ -342,7 +293,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - Support for flexible date formats
 - Complete test suite
 - Added sum functions for aggregating metrics over time periods
-- Installed anyio dependency for async support
-- Fixed PostToolUse hook dependency issues
-- Added claude-code-sdk dependency for hook functionality
-- Added typing-extensions dependency for better type support
