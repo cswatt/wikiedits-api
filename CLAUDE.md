@@ -11,17 +11,17 @@ This is a Python client library for editor analytics from the Wikimedia Analytic
 - `wikiedits/` - Main package directory
   - `__init__.py` - Package initialization, exports `new_pages` function
   - `api.py` - Core API client implementation
-- `myenv/` - Python virtual environment (gitignored)
+- `.venv/` - Python virtual environment (gitignored)
 - `README.md` - Basic project description
 - `tests` - where tests live
 
 ## Development Environment
 
-The project uses a Python virtual environment (`myenv`) for dependency isolation. 
+The project uses a Python virtual environment (`.venv`) for dependency isolation.
 
 ### Setup
 ```bash
-source myenv/bin/activate  # Activate virtual environment
+source .venv/bin/activate  # Activate virtual environment
 ```
 
 ### Dependencies

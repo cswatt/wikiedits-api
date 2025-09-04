@@ -1,6 +1,6 @@
 # wikiedits-api
 
-A Python client library for accessing Wikipedia editor analytics from the Wikimedia Analytics API. 
+A Python client library for accessing Wikipedia editor analytics from the Wikimedia Analytics API.
 
 ## Installation
 
@@ -42,9 +42,9 @@ Aggregated edit counts over time.
 Returns something like:
 
 ```
-[{'timestamp': '2024-01-01T00:00:00.000Z', 'edits': 177370}, 
- {'timestamp': '2024-01-02T00:00:00.000Z', 'edits': 185367}, 
- {'timestamp': '2024-01-03T00:00:00.000Z', 'edits': 185573}, 
+[{'timestamp': '2024-01-01T00:00:00.000Z', 'edits': 177370},
+ {'timestamp': '2024-01-02T00:00:00.000Z', 'edits': 185367},
+ {'timestamp': '2024-01-03T00:00:00.000Z', 'edits': 185573},
  ...
  {'timestamp': '2024-01-30T00:00:00.000Z', 'edits': 465599}]
 ```
@@ -64,10 +64,10 @@ Edit counts over time, for a specific page.
 Returns something like:
 
 ```
-[{'timestamp': '2024-01-03T00:00:00.000Z', 'edits': 1}, 
- {'timestamp': '2024-01-04T00:00:00.000Z', 'edits': 1}, 
- {'timestamp': '2024-01-05T00:00:00.000Z', 'edits': 1}, 
- ... , 
+[{'timestamp': '2024-01-03T00:00:00.000Z', 'edits': 1},
+ {'timestamp': '2024-01-04T00:00:00.000Z', 'edits': 1},
+ {'timestamp': '2024-01-05T00:00:00.000Z', 'edits': 1},
+ ... ,
  {'timestamp': '2024-01-29T00:00:00.000Z', 'edits': 2}]
 ```
 
@@ -86,9 +86,9 @@ Net byte changes (additions minus deletions) over time.
 Returns something like:
 
 ```
-[{'timestamp': '2024-01-01T00:00:00.000Z', 'net_bytes_diff': 4113808}, 
-{'timestamp': '2024-01-02T00:00:00.000Z', 'net_bytes_diff': 10456087}, 
-{'timestamp': '2024-01-03T00:00:00.000Z', 'net_bytes_diff': 12598440}, 
+[{'timestamp': '2024-01-01T00:00:00.000Z', 'net_bytes_diff': 4113808},
+{'timestamp': '2024-01-02T00:00:00.000Z', 'net_bytes_diff': 10456087},
+{'timestamp': '2024-01-03T00:00:00.000Z', 'net_bytes_diff': 12598440},
 ...
 {'timestamp': '2024-01-30T00:00:00.000Z', 'net_bytes_diff': 27934337}]
 ```
@@ -102,14 +102,14 @@ Net byte changes (additions minus deletions) for a specific page, over time.
 Returns something like:
 
 ```
-[{'timestamp': '2024-01-03T00:00:00.000Z', 'net_bytes_diff': 236}, 
- {'timestamp': '2024-01-04T00:00:00.000Z', 'net_bytes_diff': 294}, 
- {'timestamp': '2024-01-05T00:00:00.000Z', 'net_bytes_diff': 232}, 
+[{'timestamp': '2024-01-03T00:00:00.000Z', 'net_bytes_diff': 236},
+ {'timestamp': '2024-01-04T00:00:00.000Z', 'net_bytes_diff': 294},
+ {'timestamp': '2024-01-05T00:00:00.000Z', 'net_bytes_diff': 232},
  ...
  {'timestamp': '2024-01-29T00:00:00.000Z', 'net_bytes_diff': -191}]
 ```
 
-### abs_change_aggregate 
+### abs_change_aggregate
 `abs_change_aggregate(project, granularity, start, end, editor_type='all-editor-types', page_type='all-page-types')`
 
 Get absolute byte changes (total additions + deletions) over time.
@@ -127,9 +127,9 @@ Get counts of newly created pages.
 Returns something like:
 
 ```
-[{'timestamp': '2024-01-01T00:00:00.000Z', 'new_pages': 493}, 
- {'timestamp': '2024-01-02T00:00:00.000Z', 'new_pages': 648}, 
- {'timestamp': '2024-01-03T00:00:00.000Z', 'new_pages': 648}, 
+[{'timestamp': '2024-01-01T00:00:00.000Z', 'new_pages': 493},
+ {'timestamp': '2024-01-02T00:00:00.000Z', 'new_pages': 648},
+ {'timestamp': '2024-01-03T00:00:00.000Z', 'new_pages': 648},
  ...
  {'timestamp': '2024-01-30T00:00:00.000Z', 'new_pages': 488}]
 ```
@@ -200,16 +200,16 @@ Get pages with the largest absolute content changes.
 ### Common Parameters
 
 - **`project`** (str): Wikipedia project (e.g., "en.wikipedia.org", "fr.wikipedia.org")
-- **`granularity`** (str): Time granularity - "daily" or "monthly" 
+- **`granularity`** (str): Time granularity - "daily" or "monthly"
 - **`start`** (str): Start date - YYYYMMDD, ISO format, or human-readable
 - **`end`** (str): End date - YYYYMMDD, ISO format, or human-readable
 - **`date`** (str): Specific date for top-by functions
 
 ### Optional Filters
 
-- **`editor_type`** (str): 
+- **`editor_type`** (str):
   - `"all-editor-types"` (default) - All editors
-  - `"anonymous"` - Anonymous/IP editors  
+  - `"anonymous"` - Anonymous/IP editors
   - `"group-bot"` - Bot accounts
   - `"name-bot"` - Named bot accounts
   - `"user"` - Registered users
@@ -222,7 +222,7 @@ Get pages with the largest absolute content changes.
 - **`activity_level`** (str): For `edited_pages()` only
   - `"all-activity-levels"` (default)
   - `"1..4-edits"` - Pages with 1-4 edits
-  - `"5..24-edits"` - Pages with 5-24 edits  
+  - `"5..24-edits"` - Pages with 5-24 edits
   - `"25..99-edits"` - Pages with 25-99 edits
   - `"100..-edits"` - Pages with 100+ edits
 
@@ -235,7 +235,7 @@ The library accepts flexible date formats:
 wikiedits.edits_aggregate("en.wikipedia.org", "daily", "20240101", "20240131")
 
 # ISO format
-wikiedits.edits_aggregate("en.wikipedia.org", "daily", "2024-01-01", "2024-01-31") 
+wikiedits.edits_aggregate("en.wikipedia.org", "daily", "2024-01-01", "2024-01-31")
 
 # Human readable
 wikiedits.edits_aggregate("en.wikipedia.org", "daily", "January 1, 2024", "January 31, 2024")
@@ -252,7 +252,7 @@ from requests.exceptions import RequestException
 try:
     edits = wikiedits.edits_aggregate(
         project="en.wikipedia.org",
-        granularity="daily", 
+        granularity="daily",
         start="invalid-date",
         end="2024-01-31"
     )
