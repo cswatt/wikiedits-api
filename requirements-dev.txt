@@ -1,2 +1,7 @@
 pytest>=6.0
 pytest-mock>=3.6.0
+black>=22.0
+flake8>=4.0
+isort>=5.0
+mypy>=0.991
+pre-commit>=2.0

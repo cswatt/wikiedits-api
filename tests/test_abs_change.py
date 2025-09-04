@@ -1,133 +1,151 @@
 import unittest
-from unittest.mock import patch, Mock
+from unittest.mock import Mock, patch
+
 from wikiedits.api import abs_change_aggregate, abs_change_per_page
 
 
 class TestAbsChange(unittest.TestCase):
-    
-    @patch('wikiedits.api.requests.get')
+    @patch("wikiedits.api.requests.get")
     def test_abs_change_aggregate_basic(self, mock_get):
         """Test basic absolute change aggregate functionality"""
         mock_response = Mock()
         mock_response.json.return_value = {
-            'items': [{
-                'results': [
-                    {'project': 'en.wikipedia', 'abs_bytes_diff': 25000, 'timestamp': '20240101'},
-                    {'project': 'en.wikipedia', 'abs_bytes_diff': 28000, 'timestamp': '20240102'}
-                ]
-            }]
+            "items": [
+                {
+                    "results": [
+                        {
+                            "project": "en.wikipedia",
+                            "abs_bytes_diff": 25000,
+                            "timestamp": "20240101",
+                        },
+                        {
+                            "project": "en.wikipedia",
+                            "abs_bytes_diff": 28000,
+                            "timestamp": "20240102",
+                        },
+                    ]
+                }
+            ]
         }
         mock_response.raise_for_status = Mock()
         mock_get.return_value = mock_response
-        
-        result = abs_change_aggregate('en.wikipedia', 'daily', '20240101', '20240102')
-        
+
+        result = abs_change_aggregate("en.wikipedia", "daily", "20240101", "20240102")
+
         mock_get.assert_called_once_with(
-            'https://wikimedia.org/api/rest_v1/metrics/bytes-difference/absolute/aggregate/en.wikipedia/all-editor-types/all-page-types/daily/20240101/20240102',
-            headers={
-                'User-Agent': 'wikiedits-api/0.1.0',
-                'Accept': 'application/json'
-            },
-            timeout=30
+            "https://wikimedia.org/api/rest_v1/metrics/bytes-difference/"
+            "absolute/aggregate/en.wikipedia/all-editor-types/all-page-types/"
+            "daily/20240101/20240102",
+            headers={"User-Agent": "wikiedits-api/0.1.0", "Accept": "application/json"},
+            timeout=30,
         )
-        self.assertEqual(result[0]['abs_bytes_diff'], 25000)
-        self.assertEqual(result[1]['abs_bytes_diff'], 28000)
-    
-    @patch('wikiedits.api.requests.get')
+        self.assertEqual(result[0]["abs_bytes_diff"], 25000)
+        self.assertEqual(result[1]["abs_bytes_diff"], 28000)
+
+    @patch("wikiedits.api.requests.get")
     def test_abs_change_aggregate_custom_parameters(self, mock_get):
         """Test absolute change aggregate with custom parameters"""
         mock_response = Mock()
-        mock_response.json.return_value = {'items': [{'results': []}]}
+        mock_response.json.return_value = {"items": [{"results": []}]}
         mock_response.raise_for_status = Mock()
         mock_get.return_value = mock_response
-        
+
         abs_change_aggregate(
-            'de.wikipedia',
-            'monthly',
-            '20240101',
-            '20240105',
-            editor_type='user',
-            page_type='content'
+            "de.wikipedia",
+            "monthly",
+            "20240101",
+            "20240105",
+            editor_type="user",
+            page_type="content",
         )
-        
+
         mock_get.assert_called_once_with(
-            'https://wikimedia.org/api/rest_v1/metrics/bytes-difference/absolute/aggregate/de.wikipedia/user/content/monthly/20240101/20240105',
-            headers={
-                'User-Agent': 'wikiedits-api/0.1.0',
-                'Accept': 'application/json'
-            },
-            timeout=30
+            "https://wikimedia.org/api/rest_v1/metrics/bytes-difference/"
+            "absolute/aggregate/de.wikipedia/user/content/monthly/"
+            "20240101/20240105",
+            headers={"User-Agent": "wikiedits-api/0.1.0", "Accept": "application/json"},
+            timeout=30,
         )
-    
-    @patch('wikiedits.api.requests.get')
+
+    @patch("wikiedits.api.requests.get")
     def test_abs_change_per_page_basic(self, mock_get):
         """Test basic absolute change per page functionality"""
         mock_response = Mock()
         mock_response.json.return_value = {
-            'items': [{
-                'results': [
-                    {'project': 'en.wikipedia', 'page_title': 'Python', 'abs_bytes_diff': 750, 'timestamp': '20240101'},
-                    {'project': 'en.wikipedia', 'page_title': 'Python', 'abs_bytes_diff': 620, 'timestamp': '20240102'}
-                ]
-            }]
+            "items": [
+                {
+                    "results": [
+                        {
+                            "project": "en.wikipedia",
+                            "page_title": "Python",
+                            "abs_bytes_diff": 750,
+                            "timestamp": "20240101",
+                        },
+                        {
+                            "project": "en.wikipedia",
+                            "page_title": "Python",
+                            "abs_bytes_diff": 620,
+                            "timestamp": "20240102",
+                        },
+                    ]
+                }
+            ]
         }
         mock_response.raise_for_status = Mock()
         mock_get.return_value = mock_response
-        
-        result = abs_change_per_page('en.wikipedia', 'Python', 'daily', '20240101', '20240102')
-        
-        mock_get.assert_called_once_with(
-            'https://wikimedia.org/api/rest_v1/metrics/bytes-difference/absolute/per-page/en.wikipedia/Python/all-editor-types/daily/20240101/20240102',
-            headers={
-                'User-Agent': 'wikiedits-api/0.1.0',
-                'Accept': 'application/json'
-            },
-            timeout=30
+
+        result = abs_change_per_page(
+            "en.wikipedia", "Python", "daily", "20240101", "20240102"
         )
-        self.assertEqual(result[0]['abs_bytes_diff'], 750)
-        self.assertEqual(result[1]['abs_bytes_diff'], 620)
-    
-    @patch('wikiedits.api.requests.get')
+
+        mock_get.assert_called_once_with(
+            "https://wikimedia.org/api/rest_v1/metrics/bytes-difference/absolute/per-page/en.wikipedia/Python/all-editor-types/daily/20240101/20240102",
+            headers={"User-Agent": "wikiedits-api/0.1.0", "Accept": "application/json"},
+            timeout=30,
+        )
+        self.assertEqual(result[0]["abs_bytes_diff"], 750)
+        self.assertEqual(result[1]["abs_bytes_diff"], 620)
+
+    @patch("wikiedits.api.requests.get")
     def test_abs_change_per_page_custom_parameters(self, mock_get):
         """Test absolute change per page with custom parameters"""
         mock_response = Mock()
-        mock_response.json.return_value = {'items': [{'results': []}]}
+        mock_response.json.return_value = {"items": [{"results": []}]}
         mock_response.raise_for_status = Mock()
         mock_get.return_value = mock_response
-        
+
         abs_change_per_page(
-            'fr.wikipedia',
-            'Artificial_intelligence',
-            'monthly',
-            '20240101',
-            '20240105',
-            editor_type='user'
+            "fr.wikipedia",
+            "Artificial_intelligence",
+            "monthly",
+            "20240101",
+            "20240105",
+            editor_type="user",
         )
-        
+
         mock_get.assert_called_once_with(
-            'https://wikimedia.org/api/rest_v1/metrics/bytes-difference/absolute/per-page/fr.wikipedia/Artificial_intelligence/user/monthly/20240101/20240105',
-            headers={
-                'User-Agent': 'wikiedits-api/0.1.0',
-                'Accept': 'application/json'
-            },
-            timeout=30
+            "https://wikimedia.org/api/rest_v1/metrics/bytes-difference/absolute/per-page/fr.wikipedia/Artificial_intelligence/user/monthly/20240101/20240105",
+            headers={"User-Agent": "wikiedits-api/0.1.0", "Accept": "application/json"},
+            timeout=30,
         )
-    
-    @patch('wikiedits.api.validate_dates')
-    @patch('wikiedits.api.requests.get')
+
+    @patch("wikiedits.api.validate_dates")
+    @patch("wikiedits.api.requests.get")
     def test_abs_change_date_validation(self, mock_get, mock_validate):
         """Test that date validation is called for both functions"""
         mock_response = Mock()
-        mock_response.json.return_value = {'items': [{'results': []}]}
+        mock_response.json.return_value = {"items": [{"results": []}]}
         mock_response.raise_for_status = Mock()
         mock_get.return_value = mock_response
-        mock_validate.side_effect = [('20240101', '20240102'), ('20240101', '20240102')]
-        
-        abs_change_aggregate('en.wikipedia', 'daily', '2024-01-01', '2024-01-02')
-        abs_change_per_page('en.wikipedia', 'Test_page', 'daily', '2024-01-01', '2024-01-02')
-        
+        mock_validate.side_effect = [("20240101", "20240102"), ("20240101", "20240102")]
+
+        abs_change_aggregate("en.wikipedia", "daily", "2024-01-01", "2024-01-02")
+        abs_change_per_page(
+            "en.wikipedia", "Test_page", "daily", "2024-01-01", "2024-01-02"
+        )
+
         self.assertEqual(mock_validate.call_count, 2)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
