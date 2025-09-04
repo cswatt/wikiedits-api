@@ -341,3 +341,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - Type hints and comprehensive error handling
 - Support for flexible date formats
 - Complete test suite
+- Added sum functions for aggregating metrics over time periods
+- Installed anyio dependency for async support
+- Fixed PostToolUse hook dependency issues
+- Added claude-code-sdk dependency for hook functionality
+- Added typing-extensions dependency for better type support
