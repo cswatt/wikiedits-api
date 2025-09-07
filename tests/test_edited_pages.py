@@ -14,14 +14,14 @@ class TestEditedPages(unittest.TestCase):
         {
           "results": [
             {
-              "project": "en.wikipedia",
+              "project": "en.wikipedia.org",
               "edited_pages": 2500,
-              "timestamp": "20240101",
+              "timestamp": "20250101",
             },
             {
-              "project": "en.wikipedia",
+              "project": "en.wikipedia.org",
               "edited_pages": 2800,
-              "timestamp": "20240102",
+              "timestamp": "20250102",
             },
           ]
         }
@@ -30,12 +30,12 @@ class TestEditedPages(unittest.TestCase):
     mock_response.raise_for_status = Mock()
     mock_get.return_value = mock_response
 
-    result = edited_pages("en.wikipedia", "daily", "20240101", "20240102")
+    result = edited_pages("en.wikipedia.org", "daily", "20250101", "20250102")
 
     mock_get.assert_called_once_with(
       "https://wikimedia.org/api/rest_v1/metrics/edited-pages/"
-      "aggregate/en.wikipedia/all-editor-types/all-page-types/"
-      "all-activity-levels/daily/20240101/20240102",
+      "aggregate/en.wikipedia.org/all-editor-types/all-page-types/"
+      "all-activity-levels/daily/20250101/20250102",
       headers={"User-Agent": "wikiedits-api/0.1.0", "Accept": "application/json"},
       timeout=30,
     )
@@ -51,10 +51,10 @@ class TestEditedPages(unittest.TestCase):
     mock_get.return_value = mock_response
 
     edited_pages(
-      "de.wikipedia",
+      "de.wikipedia.org",
       "monthly",
-      "20240101",
-      "20240105",
+      "20250101",
+      "20250105",
       editor_type="user",
       page_type="content",
       activity_level="1..4-edits",
@@ -62,8 +62,8 @@ class TestEditedPages(unittest.TestCase):
 
     mock_get.assert_called_once_with(
       "https://wikimedia.org/api/rest_v1/metrics/edited-pages/"
-      "aggregate/de.wikipedia/user/content/1..4-edits/monthly/"
-      "20240101/20240105",
+      "aggregate/de.wikipedia.org/user/content/1..4-edits/monthly/"
+      "20250101/20250105",
       headers={"User-Agent": "wikiedits-api/0.1.0", "Accept": "application/json"},
       timeout=30,
     )
@@ -76,9 +76,9 @@ class TestEditedPages(unittest.TestCase):
     mock_response.raise_for_status = Mock()
     mock_get.return_value = mock_response
 
-    edited_pages("fr.wikipedia", "daily", "20240201", "20240228")
+    edited_pages("fr.wikipedia.org", "daily", "20250201", "20250228")
 
-    expected_url = "https://wikimedia.org/api/rest_v1/metrics/edited-pages/aggregate/fr.wikipedia/all-editor-types/all-page-types/all-activity-levels/daily/20240201/20240228"
+    expected_url = "https://wikimedia.org/api/rest_v1/metrics/edited-pages/aggregate/fr.wikipedia.org/all-editor-types/all-page-types/all-activity-levels/daily/20250201/20250228"
     mock_get.assert_called_once_with(
       expected_url,
       headers={"User-Agent": "wikiedits-api/0.1.0", "Accept": "application/json"},
@@ -94,14 +94,14 @@ class TestEditedPages(unittest.TestCase):
     mock_get.return_value = mock_response
 
     edited_pages(
-      "es.wikipedia",
+      "es.wikipedia.org",
       "daily",
-      "20240301",
-      "20240331",
+      "20250301",
+      "20250331",
       activity_level="5..24-edits",
     )
 
-    expected_url = "https://wikimedia.org/api/rest_v1/metrics/edited-pages/aggregate/es.wikipedia/all-editor-types/all-page-types/5..24-edits/daily/20240301/20240331"
+    expected_url = "https://wikimedia.org/api/rest_v1/metrics/edited-pages/aggregate/es.wikipedia.org/all-editor-types/all-page-types/5..24-edits/daily/20250301/20250331"
     mock_get.assert_called_once_with(
       expected_url,
       headers={"User-Agent": "wikiedits-api/0.1.0", "Accept": "application/json"},
@@ -116,12 +116,12 @@ class TestEditedPages(unittest.TestCase):
     mock_response.json.return_value = {"items": [{"results": []}]}
     mock_response.raise_for_status = Mock()
     mock_get.return_value = mock_response
-    mock_validate.return_value = ("20240101", "20240102")
+    mock_validate.return_value = ("20250101", "20250102")
 
-    edited_pages("en.wikipedia", "daily", "2024-01-01", "2024-01-02")
+    edited_pages("en.wikipedia.org", "daily", "2025-01-01", "2025-01-02")
 
     self.assertEqual(mock_validate.call_count, 1)
-    mock_validate.assert_called_with("daily", "2024-01-01", "2024-01-02")
+    mock_validate.assert_called_with("daily", "2025-01-01", "2025-01-02")
 
 
 if __name__ == "__main__":
