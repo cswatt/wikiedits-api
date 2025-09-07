@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import Mock, patch
 
-from wikiedits.api import net_bytes_diff_aggregate, net_bytes_diff_per_page
+from wikiedits.api import bytes_diff_net_aggregate, net_bytes_diff_per_page
 
 
 class TestNetChange(unittest.TestCase):
@@ -30,7 +30,7 @@ class TestNetChange(unittest.TestCase):
     mock_response.raise_for_status = Mock()
     mock_get.return_value = mock_response
 
-    result = net_bytes_diff_aggregate(
+    result = bytes_diff_net_aggregate(
       "en.wikipedia", "daily", "20240101", "20240102"
     )
 
@@ -52,7 +52,7 @@ class TestNetChange(unittest.TestCase):
     mock_response.raise_for_status = Mock()
     mock_get.return_value = mock_response
 
-    net_bytes_diff_aggregate(
+    bytes_diff_net_aggregate(
       "de.wikipedia",
       "monthly",
       "20240101",
@@ -139,7 +139,7 @@ class TestNetChange(unittest.TestCase):
     mock_get.return_value = mock_response
     mock_validate.side_effect = [("20240101", "20240102"), ("20240101", "20240102")]
 
-    net_bytes_diff_aggregate("en.wikipedia", "daily", "2024-01-01", "2024-01-02")
+    bytes_diff_net_aggregate("en.wikipedia", "daily", "2024-01-01", "2024-01-02")
     net_bytes_diff_per_page(
       "en.wikipedia", "Test_page", "daily", "2024-01-01", "2024-01-02"
     )
