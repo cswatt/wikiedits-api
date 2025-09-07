@@ -1,193 +1,214 @@
-## Functions
+# Function reference
 
-### edits_aggregate
+- [Basic API wrappers](#basic-api-wrappers)
+   - [`/edits/aggregate`](#edits_aggregate)
+   - [`/edits/per-page`](#edits_per_page)
+   - [`/bytes-difference/net/aggregate`](#bytes_diff_net_aggregate)
+   - [`/bytes-difference/net/per-page`](#bytes_diff_per_page)
+   - [`/bytes-difference/absolute/aggregate`](#bytes_diff_abs_aggregate)
+   - [`/bytes-difference/absolute/per-page`](#bytes_diff_abs_per_page)
+   - [`/edited-pages/new`](#new_pages)
+   - [`/edited-pages/aggregate`](#edited_pages)
+   - [`/edited-pages/top-by-net-bytes-difference/`](#top_by_net_diff)
+   - [`/edited-pages/top-by-absolute-bytes-difference/`](#top_by_abs_diff)
+   - [`/edited-pages/top-by-edits/`](#top_by_edits)
+
+### Basic API wrappers
+
+Wrapper functions for all endpoints in the [Wikimedia Edit Analytics API][https://doc.wikimedia.org/generated-data-platform/aqs/analytics-api/reference/edits.html].
+
+### `edits_aggregate`
+
 `edits_aggregate(project, granularity, start, end, editor_type='all-editor-types', page_type='all-page-types')`
 
-Aggregated edit counts over time.
+Get number of edits.
 
-Returns something like:
-
-```
-[{'timestamp': '2024-01-01T00:00:00.000Z', 'edits': 177370},
- {'timestamp': '2024-01-02T00:00:00.000Z', 'edits': 185367},
- {'timestamp': '2024-01-03T00:00:00.000Z', 'edits': 185573},
- ...
- {'timestamp': '2024-01-30T00:00:00.000Z', 'edits': 465599}]
-```
-
-### sum_edits_aggregate
-`sum_edits_aggregate(project, start, end, editor_type = 'all-editor-types', page_type = 'all-page-types')`
-
-A sum of all edits over a period of time.
-
-Returns an integer like `6468782`.
+<details>
+<summary>Parameters</summary>
+- `project` (str): The Wikimedia project to look at, e.g. `en.wikipedia.org`, `all-wikipedia-projects`, `all-projects`
+- `granularity` (str): Time interval between data points.
+   Allowed: `daily`, `monthly`
+- `start` (str): First day to include. YYYYMMDD, ISO format, or human-readable.
+- `end` (str): Last day to include. YYYYMMDD, ISO format, or human-readable.
+- `editor_type` (str): Type of editor.
+   Allowed: `all-editor-types`, `anonymous`, `group-bot` (registered accounts belonging to the bot group), `name-bot` (registered accounts with bot-like names), `user`
+- `page_type` (str): Type of page.
+   Allowed: `all-page-types`, `content` (articles), `non-content` (e.g. discussion pages)
+</details>
 
 ### edits_per_page
 `edits_per_page(project, page_title, granularity, start, end, editor_type='all-editor-types')`
 
-Edit counts over time, for a specific page.
+Get number of edits to a page.
 
-Returns something like:
+<details>
+<summary>Parameters</summary>
+- `project` (str): The Wikimedia project to look at, e.g. `en.wikipedia.org`, `all-wikipedia-projects`, `all-projects`
+- `page_title` (str): Page title in URL-encoded format, e.g. `Climate_change`
+- `granularity` (str): Time interval between data points.
+   Allowed: `daily`, `monthly`
+- `start` (str): First day to include. YYYYMMDD, ISO format, or human-readable.
+- `end` (str): Last day to include. YYYYMMDD, ISO format, or human-readable.
+- `editor_type` (str): Type of editor.
+   Allowed: `all-editor-types`, `anonymous`, `group-bot` (registered accounts belonging to the bot group), `name-bot` (registered accounts with bot-like names), `user`
+- `page_type` (str): Type of page.
+   Allowed: `all-page-types`, `content` (articles), `non-content` (e.g. discussion pages)
+</details>
 
-```
-[{'timestamp': '2024-01-03T00:00:00.000Z', 'edits': 1},
- {'timestamp': '2024-01-04T00:00:00.000Z', 'edits': 1},
- {'timestamp': '2024-01-05T00:00:00.000Z', 'edits': 1},
- ... ,
- {'timestamp': '2024-01-29T00:00:00.000Z', 'edits': 2}]
-```
+### bytes_diff_net_aggregate
+`bytes_diff_net_aggregate(project, granularity, start, end, editor_type='all-editor-types', page_type='all-page-types')`
 
-### sum_edits_per_page
-`sum_edits_per_page(project, page_title, start, end, editor_type = 'all-editor-types', page_type = 'all-page-types')`
+Get net byte changes (additions minus deletions).
 
-Summed edit counts of a page over a period of time.
+<details>
+<summary>Parameters</summary>
+- `project` (str): The Wikimedia project to look at, e.g. `en.wikipedia.org`, `all-wikipedia-projects`, `all-projects`
+- `granularity` (str): Time interval between data points.
+   Allowed: `daily`, `monthly`
+- `start` (str): First day to include. YYYYMMDD, ISO format, or human-readable.
+- `end` (str): Last day to include. YYYYMMDD, ISO format, or human-readable.
+- `editor_type` (str): Type of editor.
+   Allowed: `all-editor-types`, `anonymous`, `group-bot` (registered accounts belonging to the bot group), `name-bot` (registered accounts with bot-like names), `user`
+- `page_type` (str): Type of page.
+   Allowed: `all-page-types`, `content` (articles), `non-content` (e.g. discussion pages)
+</details>
 
-Returns an integer.
+### bytes_diff_per_page
 
-### net_bytes_diff_aggregate
-`net_bytes_diff_aggregate(project, granularity, start, end, editor_type='all-editor-types', page_type='all-page-types')`
+`bytes_diff_per_page(project, page_title, granularity, start, end, editor_type='all-editor-types')`
 
-Net byte changes (additions minus deletions) over time.
+Get net byte changes (additions minus deletions) to a page.
 
-Returns something like:
+<details>
+<summary>Parameters</summary>
+- `project` (str): The Wikimedia project to look at, e.g. `en.wikipedia.org`, `all-wikipedia-projects`, `all-projects`
+- `page_title` (str): Page title in URL-encoded format, e.g. `Climate_change`
+- `granularity` (str): Time interval between data points.
+   Allowed: `daily`, `monthly`
+- `start` (str): First day to include. YYYYMMDD, ISO format, or human-readable.
+- `end` (str): Last day to include. YYYYMMDD, ISO format, or human-readable.
+- `editor_type` (str): Type of editor.
+   Allowed: `all-editor-types`, `anonymous`, `group-bot` (registered accounts belonging to the bot group), `name-bot` (registered accounts with bot-like names), `user`
+- `page_type` (str): Type of page.
+   Allowed: `all-page-types`, `content` (articles), `non-content` (e.g. discussion pages)
+</details>
 
-```
-[{'timestamp': '2024-01-01T00:00:00.000Z', 'net_bytes_diff': 4113808},
-{'timestamp': '2024-01-02T00:00:00.000Z', 'net_bytes_diff': 10456087},
-{'timestamp': '2024-01-03T00:00:00.000Z', 'net_bytes_diff': 12598440},
-...
-{'timestamp': '2024-01-30T00:00:00.000Z', 'net_bytes_diff': 27934337}]
-```
+### bytes_diff_abs_aggregate
+`bytes_diff_abs_aggregate(project, granularity, start, end, editor_type='all-editor-types', page_type='all-page-types')`
 
-### net_bytes_diff_per_page
+<details>
+<summary>Parameters</summary>
+- `project` (str): The Wikimedia project to look at, e.g. `en.wikipedia.org`, `all-wikipedia-projects`, `all-projects`
+- `granularity` (str): Time interval between data points.
+   Allowed: `daily`, `monthly`
+- `start` (str): First day to include. YYYYMMDD, ISO format, or human-readable.
+- `end` (str): Last day to include. YYYYMMDD, ISO format, or human-readable.
+- `editor_type` (str): Type of editor.
+   Allowed: `all-editor-types`, `anonymous`, `group-bot` (registered accounts belonging to the bot group), `name-bot` (registered accounts with bot-like names), `user`
+- `page_type` (str): Type of page.
+   Allowed: `all-page-types`, `content` (articles), `non-content` (e.g. discussion pages)
+</details>
 
-`net_bytes_diff_per_page(project, page_title, granularity, start, end, editor_type='all-editor-types')`
+Get absolute byte changes (total additions + deletions).
 
-Net byte changes (additions minus deletions) for a specific page, over time.
+### bytes_diff_abs_per_page
+`bytes_diff_abs_per_page(project, page_title, granularity, start, end, editor_type='all-editor-types')`
 
-Returns something like:
+Get absolute byte changes (additions + deletions) to a page.
 
-```
-[{'timestamp': '2024-01-03T00:00:00.000Z', 'net_bytes_diff': 236},
- {'timestamp': '2024-01-04T00:00:00.000Z', 'net_bytes_diff': 294},
- {'timestamp': '2024-01-05T00:00:00.000Z', 'net_bytes_diff': 232},
- ...
- {'timestamp': '2024-01-29T00:00:00.000Z', 'net_bytes_diff': -191}]
-```
-
-### abs_change_aggregate
-`abs_change_aggregate(project, granularity, start, end, editor_type='all-editor-types', page_type='all-page-types')`
-
-Get absolute byte changes (total additions + deletions) over time.
-
-### abs_change_per_page
-`abs_change_per_page(project, page_title, granularity, start, end, editor_type='all-editor-types')`
-
-Get absolute byte changes (additions + deletions) for a specific page.
+<details>
+<summary>Parameters</summary>
+- `project` (str): The Wikimedia project to look at, e.g. `en.wikipedia.org`, `all-wikipedia-projects`, `all-projects`
+- `page_title` (str): Page title in URL-encoded format, e.g. `Climate_change`
+- `granularity` (str): Time interval between data points.
+   Allowed: `daily`, `monthly`
+- `start` (str): First day to include. YYYYMMDD, ISO format, or human-readable.
+- `end` (str): Last day to include. YYYYMMDD, ISO format, or human-readable.
+- `editor_type` (str): Type of editor.
+   Allowed: `all-editor-types`, `anonymous`, `group-bot` (registered accounts belonging to the bot group), `name-bot` (registered accounts with bot-like names), `user`
+- `page_type` (str): Type of page.
+   Allowed: `all-page-types`, `content` (articles), `non-content` (e.g. discussion pages)
+</details>
 
 ### new_pages
 `new_pages(project, granularity, start, end, editor_type='all-editor-types', page_type='all-page-types')`
 
-Get counts of newly created pages.
+Get number of new pages.
 
-Returns something like:
-
-```
-[{'timestamp': '2024-01-01T00:00:00.000Z', 'new_pages': 493},
- {'timestamp': '2024-01-02T00:00:00.000Z', 'new_pages': 648},
- {'timestamp': '2024-01-03T00:00:00.000Z', 'new_pages': 648},
- ...
- {'timestamp': '2024-01-30T00:00:00.000Z', 'new_pages': 488}]
-```
-
-### sum_new_pages
-`sum_new_pages(project, start, end, editor_type='all-editor-types', page_type='all-page-types')`
-
-Sum of all new pages in a provided time frame.
-
-Returns an integer.
+<details>
+<summary>Parameters</summary>
+- `project` (str): The Wikimedia project to look at, e.g. `en.wikipedia.org`, `all-wikipedia-projects`, `all-projects`
+- `granularity` (str): Time interval between data points.
+   Allowed: `daily`, `monthly`
+- `start` (str): First day to include. YYYYMMDD, ISO format, or human-readable.
+- `end` (str): Last day to include. YYYYMMDD, ISO format, or human-readable.
+- `editor_type` (str): Type of editor.
+   Allowed: `all-editor-types`, `anonymous`, `group-bot` (registered accounts belonging to the bot group), `name-bot` (registered accounts with bot-like names), `user`
+- `page_type` (str): Type of page.
+   Allowed: `all-page-types`, `content` (articles), `non-content` (e.g. discussion pages)
+</details>
 
 ### edited_pages
 `edited_pages(project, granularity, start, end, editor_type='all-editor-types', page_type='all-page-types', activity_level='all-activity-levels')`
 
-Get counts of pages that were edited.
+Get number of edited pages.
 
-Returns something like:
-
-```
-[{'timestamp': '2024-01-01T00:00:00.000Z', 'edited_pages': 106507},
- {'timestamp': '2024-01-02T00:00:00.000Z', 'edited_pages': 112384},
- {'timestamp': '2024-01-03T00:00:00.000Z', 'edited_pages': 111012},
- ...
- {'timestamp': '2024-01-30T00:00:00.000Z', 'edited_pages': 384863}]
-```
-
-### sum_edited_pages
-`sum_edited_pages(project, start, end, editor_type='all-editor-types', page_type='all-page-types', activity_level='all-activity-levels')`
-
-Sum of edited pages in a provided time frame. Use `activity_level` to specify a certain number of edits.
+<details>
+<summary>Parameters</summary>
+- `project` (str): The Wikimedia project to look at, e.g. `en.wikipedia.org`, `all-wikipedia-projects`, `all-projects`
+- `granularity` (str): Time interval between data points.
+   Allowed: `daily`, `monthly`
+- `start` (str): First day to include. YYYYMMDD, ISO format, or human-readable.
+- `end` (str): Last day to include. YYYYMMDD, ISO format, or human-readable.
+- `editor_type` (str): Type of editor.
+   Allowed: `all-editor-types`, `anonymous`, `group-bot` (registered accounts belonging to the bot group), `name-bot` (registered accounts with bot-like names), `user`
+- `page_type` (str): Type of page.
+   Allowed: `all-page-types`, `content` (articles), `non-content` (e.g. discussion pages)
+- `activity_level` (str) : Editor activity range.
+   Allowed: `all-activity-levels`, `1..4-edits`, `5..24-edits`, `25..99-edits`, `100..-edits`
+</details>
 
 ### top_by_edits
 `top_by_edits(project, date, editor_type='all-editor-types', page_type='all-page-types')`
 
-Get pages with the most edits on a specific day.
+List most-edited pages by number of edits.
 
-```python
-# Most edited pages on January 1st, 2024
-top_pages = wikiedits.top_by_edits(
-    project="en.wikipedia.org",
-    date="2025-06-01",
-    page_type="content"
-)
-```
-
-Returns something like:
-
-```
-[{'page_title': 'List_of_people_named_Peter', 'edits': 293, 'rank': 1},
- {'page_title': 'Operation_Spiderweb', 'edits': 173, 'rank': 2},
- {'page_title': '1993_in_the_United_States', 'edits': 116, 'rank': 3},
- ...
- {'page_title': '2023_Terengganu_FC_season', 'edits': 26, 'rank': 100}]
-```
+<details>
+<summary>Parameters</summary>
+- `project` (str): The Wikimedia project to look at, e.g. `en.wikipedia.org`, `all-wikipedia-projects`, `all-projects`
+- `date` (str): Date. YYYYMMDD, ISO format, or human-readable.
+- `editor_type` (str): Type of editor.
+   Allowed: `all-editor-types`, `anonymous`, `group-bot` (registered accounts belonging to the bot group), `name-bot` (registered accounts with bot-like names), `user`
+- `page_type` (str): Type of page.
+   Allowed: `all-page-types`, `content` (articles), `non-content` (e.g. discussion pages)
+</details>
 
 ### top_by_net_diff
 `top_by_net_diff(project, date, editor_type='all-editor-types', page_type='all-page-types')`
 
-Get pages with the largest net content changes.
+List most-edited pages by net byte change (additions minus deletions).
+
+<details>
+<summary>Parameters</summary>
+- `project` (str): The Wikimedia project to look at, e.g. `en.wikipedia.org`, `all-wikipedia-projects`, `all-projects`
+- `date` (str): Date. YYYYMMDD, ISO format, or human-readable.
+- `editor_type` (str): Type of editor.
+   Allowed: `all-editor-types`, `anonymous`, `group-bot` (registered accounts belonging to the bot group), `name-bot` (registered accounts with bot-like names), `user`
+- `page_type` (str): Type of page.
+   Allowed: `all-page-types`, `content` (articles), `non-content` (e.g. discussion pages)
+</details>
 
 ### top_by_abs_diff
 `top_by_abs_diff(project, date, editor_type='all-editor-types', page_type='all-page-types')`
 
-Get pages with the largest absolute content changes.
+List most-edited pages by absolute byte change (additions plus deletions).
 
-## Parameters
-
-### Common Parameters
-
-- **`project`** (str): Wikipedia project (e.g., "en.wikipedia.org", "fr.wikipedia.org")
-- **`granularity`** (str): Time granularity - "daily" or "monthly"
-- **`start`** (str): Start date - YYYYMMDD, ISO format, or human-readable
-- **`end`** (str): End date - YYYYMMDD, ISO format, or human-readable
-- **`date`** (str): Specific date for top-by functions
-
-### Optional Filters
-
-- **`editor_type`** (str):
-  - `"all-editor-types"` (default) - All editors
-  - `"anonymous"` - Anonymous/IP editors
-  - `"group-bot"` - Bot accounts
-  - `"name-bot"` - Named bot accounts
-  - `"user"` - Registered users
-
-- **`page_type`** (str):
-  - `"all-page-types"` (default) - All page types
-  - `"content"` - Content pages (articles)
-  - `"non-content"` - Non-content pages (talk, user, etc.)
-
-- **`activity_level`** (str): For `edited_pages()` only
-  - `"all-activity-levels"` (default)
-  - `"1..4-edits"` - Pages with 1-4 edits
-  - `"5..24-edits"` - Pages with 5-24 edits
-  - `"25..99-edits"` - Pages with 25-99 edits
-  - `"100..-edits"` - Pages with 100+ edits
+<details>
+<summary>Parameters</summary>
+- `project` (str): The Wikimedia project to look at, e.g. `en.wikipedia.org`, `all-wikipedia-projects`, `all-projects`
+- `date` (str): Date. YYYYMMDD, ISO format, or human-readable.
+- `editor_type` (str): Type of editor.
+   Allowed: `all-editor-types`, `anonymous`, `group-bot` (registered accounts belonging to the bot group), `name-bot` (registered accounts with bot-like names), `user`
+- `page_type` (str): Type of page.
+   Allowed: `all-page-types`, `content` (articles), `non-content` (e.g. discussion pages)
+</details>
