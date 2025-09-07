@@ -16,7 +16,12 @@ from .api import (
   top_by_net_diff,
 )
 
+from .client import (
+ edits
+)
+
 __all__ = [
+  "edits",
   "edits_aggregate",
   "sum_edits_aggregate",
   "edits_per_page",
