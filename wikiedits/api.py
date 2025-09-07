@@ -220,7 +220,7 @@ def bytes_diff_net_aggregate(
   )
 
 
-def net_bytes_diff_per_page(
+def bytes_diff_per_page(
   project: str,
   page_title: str,
   granularity: str,
@@ -239,7 +239,7 @@ def net_bytes_diff_per_page(
   )
 
 
-def abs_change_aggregate(
+def bytes_diff_abs_aggregate(
   project: str,
   granularity: str,
   start: str,
@@ -258,7 +258,7 @@ def abs_change_aggregate(
   )
 
 
-def abs_change_per_page(
+def bytes_diff_abs_per_page(
   project: str,
   page_title: str,
   granularity: str,

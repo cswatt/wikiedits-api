@@ -1,12 +1,12 @@
 import unittest
 from unittest.mock import Mock, patch
 
-from wikiedits.api import abs_change_aggregate, abs_change_per_page
+from wikiedits.api import bytes_diff_abs_aggregate, bytes_diff_abs_per_page
 
 
 class TestAbsChange(unittest.TestCase):
   @patch("wikiedits.api.requests.get")
-  def test_abs_change_aggregate_basic(self, mock_get):
+  def test_bytes_diff_abs_aggregate_basic(self, mock_get):
     """Test basic absolute change aggregate functionality"""
     mock_response = Mock()
     mock_response.json.return_value = {
@@ -30,7 +30,7 @@ class TestAbsChange(unittest.TestCase):
     mock_response.raise_for_status = Mock()
     mock_get.return_value = mock_response
 
-    result = abs_change_aggregate("en.wikipedia", "daily", "20240101", "20240102")
+    result = bytes_diff_abs_aggregate("en.wikipedia", "daily", "20240101", "20240102")
 
     mock_get.assert_called_once_with(
       "https://wikimedia.org/api/rest_v1/metrics/bytes-difference/"
@@ -43,14 +43,14 @@ class TestAbsChange(unittest.TestCase):
     self.assertEqual(result[1]["abs_bytes_diff"], 28000)
 
   @patch("wikiedits.api.requests.get")
-  def test_abs_change_aggregate_custom_parameters(self, mock_get):
+  def test_bytes_diff_abs_aggregate_custom_parameters(self, mock_get):
     """Test absolute change aggregate with custom parameters"""
     mock_response = Mock()
     mock_response.json.return_value = {"items": [{"results": []}]}
     mock_response.raise_for_status = Mock()
     mock_get.return_value = mock_response
 
-    abs_change_aggregate(
+    bytes_diff_abs_aggregate(
       "de.wikipedia",
       "monthly",
       "20240101",
@@ -68,7 +68,7 @@ class TestAbsChange(unittest.TestCase):
     )
 
   @patch("wikiedits.api.requests.get")
-  def test_abs_change_per_page_basic(self, mock_get):
+  def test_bytes_diff_abs_per_page_basic(self, mock_get):
     """Test basic absolute change per page functionality"""
     mock_response = Mock()
     mock_response.json.return_value = {
@@ -94,7 +94,7 @@ class TestAbsChange(unittest.TestCase):
     mock_response.raise_for_status = Mock()
     mock_get.return_value = mock_response
 
-    result = abs_change_per_page(
+    result = bytes_diff_abs_per_page(
       "en.wikipedia", "Python", "daily", "20240101", "20240102"
     )
 
@@ -107,14 +107,14 @@ class TestAbsChange(unittest.TestCase):
     self.assertEqual(result[1]["abs_bytes_diff"], 620)
 
   @patch("wikiedits.api.requests.get")
-  def test_abs_change_per_page_custom_parameters(self, mock_get):
+  def test_bytes_diff_abs_per_page_custom_parameters(self, mock_get):
     """Test absolute change per page with custom parameters"""
     mock_response = Mock()
     mock_response.json.return_value = {"items": [{"results": []}]}
     mock_response.raise_for_status = Mock()
     mock_get.return_value = mock_response
 
-    abs_change_per_page(
+    bytes_diff_abs_per_page(
       "fr.wikipedia",
       "Artificial_intelligence",
       "monthly",
@@ -139,8 +139,8 @@ class TestAbsChange(unittest.TestCase):
     mock_get.return_value = mock_response
     mock_validate.side_effect = [("20240101", "20240102"), ("20240101", "20240102")]
 
-    abs_change_aggregate("en.wikipedia", "daily", "2024-01-01", "2024-01-02")
-    abs_change_per_page(
+    bytes_diff_abs_aggregate("en.wikipedia", "daily", "2024-01-01", "2024-01-02")
+    bytes_diff_abs_per_page(
       "en.wikipedia", "Test_page", "daily", "2024-01-01", "2024-01-02"
     )
 
