@@ -16,13 +16,13 @@ class TestTopByNetDiff(unittest.TestCase):
             {
               "top": [
                 {
-                  "project": "en.wikipedia",
+                  "project": "en.wikipedia.org",
                   "page_title": "Python",
                   "net_bytes_diff": 5000,
                   "rank": 1,
                 },
                 {
-                  "project": "en.wikipedia",
+                  "project": "en.wikipedia.org",
                   "page_title": "JavaScript",
                   "net_bytes_diff": 4500,
                   "rank": 2,
@@ -36,12 +36,12 @@ class TestTopByNetDiff(unittest.TestCase):
     mock_response.raise_for_status = Mock()
     mock_get.return_value = mock_response
 
-    result = top_by_net_diff("en.wikipedia", "20240315")
+    result = top_by_net_diff("en.wikipedia.org", "20250315")
 
     mock_get.assert_called_once_with(
       "https://wikimedia.org/api/rest_v1/metrics/edited-pages/"
-      "top-by-net-bytes-difference/en.wikipedia/all-editor-types/"
-      "all-page-types/2024/03/15",
+      "top-by-net-bytes-difference/en.wikipedia.org/all-editor-types/"
+      "all-page-types/2025/03/15",
       headers={"User-Agent": "wikiedits-api/0.1.0", "Accept": "application/json"},
       timeout=30,
     )
@@ -57,11 +57,11 @@ class TestTopByNetDiff(unittest.TestCase):
     mock_get.return_value = mock_response
 
     top_by_net_diff(
-      "fr.wikipedia", "20240415", editor_type="user", page_type="content"
+      "fr.wikipedia.org", "20250415", editor_type="user", page_type="content"
     )
 
     mock_get.assert_called_once_with(
-      "https://wikimedia.org/api/rest_v1/metrics/edited-pages/top-by-net-bytes-difference/fr.wikipedia/user/content/2024/04/15",
+      "https://wikimedia.org/api/rest_v1/metrics/edited-pages/top-by-net-bytes-difference/fr.wikipedia.org/user/content/2025/04/15",
       headers={"User-Agent": "wikiedits-api/0.1.0", "Accept": "application/json"},
       timeout=30,
     )
@@ -74,9 +74,9 @@ class TestTopByNetDiff(unittest.TestCase):
     mock_response.raise_for_status = Mock()
     mock_get.return_value = mock_response
 
-    top_by_net_diff("es.wikipedia", "20240201")
+    top_by_net_diff("es.wikipedia.org", "20250201")
 
-    expected_url = "https://wikimedia.org/api/rest_v1/metrics/edited-pages/top-by-net-bytes-difference/es.wikipedia/all-editor-types/all-page-types/2024/02/01"
+    expected_url = "https://wikimedia.org/api/rest_v1/metrics/edited-pages/top-by-net-bytes-difference/es.wikipedia.org/all-editor-types/all-page-types/2025/02/01"
     mock_get.assert_called_once_with(
       expected_url,
       headers={"User-Agent": "wikiedits-api/0.1.0", "Accept": "application/json"},
@@ -91,10 +91,10 @@ class TestTopByNetDiff(unittest.TestCase):
     mock_response.raise_for_status = Mock()
     mock_get.return_value = mock_response
 
-    top_by_net_diff("de.wikipedia", "2024-06-20")
+    top_by_net_diff("de.wikipedia.org", "2025-06-20")
 
     mock_get.assert_called_once_with(
-      "https://wikimedia.org/api/rest_v1/metrics/edited-pages/top-by-net-bytes-difference/de.wikipedia/all-editor-types/all-page-types/2024/06/20",
+      "https://wikimedia.org/api/rest_v1/metrics/edited-pages/top-by-net-bytes-difference/de.wikipedia.org/all-editor-types/all-page-types/2025/06/20",
       headers={"User-Agent": "wikiedits-api/0.1.0", "Accept": "application/json"},
       timeout=30,
     )
@@ -107,10 +107,10 @@ class TestTopByNetDiff(unittest.TestCase):
     mock_response.raise_for_status = Mock()
     mock_get.return_value = mock_response
 
-    top_by_net_diff("it.wikipedia", "07/25/2024")
+    top_by_net_diff("it.wikipedia.org", "07/25/2025")
 
     mock_get.assert_called_once_with(
-      "https://wikimedia.org/api/rest_v1/metrics/edited-pages/top-by-net-bytes-difference/it.wikipedia/all-editor-types/all-page-types/2024/07/25",
+      "https://wikimedia.org/api/rest_v1/metrics/edited-pages/top-by-net-bytes-difference/it.wikipedia.org/all-editor-types/all-page-types/2025/07/25",
       headers={"User-Agent": "wikiedits-api/0.1.0", "Accept": "application/json"},
       timeout=30,
     )
@@ -123,10 +123,10 @@ class TestTopByNetDiff(unittest.TestCase):
     mock_response.raise_for_status = Mock()
     mock_get.return_value = mock_response
 
-    top_by_net_diff("pt.wikipedia", "August 10, 2024")
+    top_by_net_diff("pt.wikipedia.org", "August 10, 2025")
 
     mock_get.assert_called_once_with(
-      "https://wikimedia.org/api/rest_v1/metrics/edited-pages/top-by-net-bytes-difference/pt.wikipedia/all-editor-types/all-page-types/2024/08/10",
+      "https://wikimedia.org/api/rest_v1/metrics/edited-pages/top-by-net-bytes-difference/pt.wikipedia.org/all-editor-types/all-page-types/2025/08/10",
       headers={"User-Agent": "wikiedits-api/0.1.0", "Accept": "application/json"},
       timeout=30,
     )
@@ -139,13 +139,13 @@ class TestTopByNetDiff(unittest.TestCase):
     mock_response.json.return_value = {"items": [{"results": [{"top": []}]}]}
     mock_response.raise_for_status = Mock()
     mock_get.return_value = mock_response
-    mock_split.return_value = ("2024", "09", "15")
+    mock_split.return_value = ("2025", "09", "15")
 
-    top_by_net_diff("en.wikipedia", "2024-09-15")
+    top_by_net_diff("en.wikipedia.org", "2025-09-15")
 
-    mock_split.assert_called_once_with("2024-09-15")
+    mock_split.assert_called_once_with("2025-09-15")
     mock_get.assert_called_once_with(
-      "https://wikimedia.org/api/rest_v1/metrics/edited-pages/top-by-net-bytes-difference/en.wikipedia/all-editor-types/all-page-types/2024/09/15",
+      "https://wikimedia.org/api/rest_v1/metrics/edited-pages/top-by-net-bytes-difference/en.wikipedia.org/all-editor-types/all-page-types/2025/09/15",
       headers={"User-Agent": "wikiedits-api/0.1.0", "Accept": "application/json"},
       timeout=30,
     )
@@ -153,7 +153,7 @@ class TestTopByNetDiff(unittest.TestCase):
   def test_top_by_net_diff_invalid_date(self):
     """Test most edited net with invalid date format"""
     with self.assertRaises(ValueError) as context:
-      top_by_net_diff("en.wikipedia", "invalid-date")
+      top_by_net_diff("en.wikipedia.org", "invalid-date")
 
     self.assertIn("Invalid date format", str(context.exception))
     self.assertIn("invalid-date", str(context.exception))
@@ -161,14 +161,14 @@ class TestTopByNetDiff(unittest.TestCase):
   def test_top_by_net_diff_none_date(self):
     """Test most edited net with None date"""
     with self.assertRaises(ValueError) as context:
-      top_by_net_diff("en.wikipedia", None)
+      top_by_net_diff("en.wikipedia.org", None)
 
     self.assertIn("Invalid date format", str(context.exception))
 
   def test_top_by_net_diff_empty_date(self):
     """Test most edited net with empty date string"""
     with self.assertRaises(ValueError) as context:
-      top_by_net_diff("en.wikipedia", "")
+      top_by_net_diff("en.wikipedia.org", "")
 
     self.assertIn("Invalid date format", str(context.exception))
 
