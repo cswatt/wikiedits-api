@@ -90,11 +90,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - [Wikimedia Analytics API Documentation](https://wikimedia.org/api/rest_v1/#/)
 
-## Changelog
+## Claude Code workflow
 
-### v0.1.0 (2025-09-01)
-- Initial release with full API coverage
-- Type hints and comprehensive error handling
-- Support for flexible date formats
-- Complete test suite
-- Added sum functions for aggregating metrics over time periods
+### Slash commands
+
+-`/rename-fn <old> <new>`: Renames a function across the project.
