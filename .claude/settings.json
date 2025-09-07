@@ -1,7 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "Bash(uv:*)"
+      "Bash(uv:*)",
+      "Bash(source .venv/bin/activate)",
+      "Bash(pytest)"
     ]
   }
 }
