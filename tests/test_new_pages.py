@@ -14,14 +14,14 @@ class TestNewPages(unittest.TestCase):
         {
           "results": [
             {
-              "project": "en.wikipedia",
+              "project": "en.wikipedia.org",
               "new_pages": 150,
-              "timestamp": "20240101",
+              "timestamp": "20250101",
             },
             {
-              "project": "en.wikipedia",
+              "project": "en.wikipedia.org",
               "new_pages": 175,
-              "timestamp": "20240102",
+              "timestamp": "20250102",
             },
           ]
         }
@@ -30,12 +30,12 @@ class TestNewPages(unittest.TestCase):
     mock_response.raise_for_status = Mock()
     mock_get.return_value = mock_response
 
-    result = new_pages("en.wikipedia", "daily", "20240101", "20240102")
+    result = new_pages("en.wikipedia.org", "daily", "20250101", "20250102")
 
     mock_get.assert_called_once_with(
       "https://wikimedia.org/api/rest_v1/metrics/edited-pages/new/"
-      "en.wikipedia/all-editor-types/all-page-types/daily/"
-      "20240101/20240102",
+      "en.wikipedia.org/all-editor-types/all-page-types/daily/"
+      "20250101/20250102",
       headers={"User-Agent": "wikiedits-api/0.1.0", "Accept": "application/json"},
       timeout=30,
     )
@@ -51,16 +51,16 @@ class TestNewPages(unittest.TestCase):
     mock_get.return_value = mock_response
 
     new_pages(
-      "de.wikipedia",
+      "de.wikipedia.org",
       "monthly",
-      "20240101",
-      "20240105",
+      "20250101",
+      "20250105",
       editor_type="user",
       page_type="content",
     )
 
     mock_get.assert_called_once_with(
-      "https://wikimedia.org/api/rest_v1/metrics/edited-pages/new/de.wikipedia/user/content/monthly/20240101/20240105",
+      "https://wikimedia.org/api/rest_v1/metrics/edited-pages/new/de.wikipedia.org/user/content/monthly/20250101/20250105",
       headers={"User-Agent": "wikiedits-api/0.1.0", "Accept": "application/json"},
       timeout=30,
     )
@@ -73,9 +73,9 @@ class TestNewPages(unittest.TestCase):
     mock_response.raise_for_status = Mock()
     mock_get.return_value = mock_response
 
-    new_pages("fr.wikipedia", "daily", "20240201", "20240228")
+    new_pages("fr.wikipedia.org", "daily", "20250201", "20250228")
 
-    expected_url = "https://wikimedia.org/api/rest_v1/metrics/edited-pages/new/fr.wikipedia/all-editor-types/all-page-types/daily/20240201/20240228"
+    expected_url = "https://wikimedia.org/api/rest_v1/metrics/edited-pages/new/fr.wikipedia.org/all-editor-types/all-page-types/daily/20250201/20250228"
     mock_get.assert_called_once_with(
       expected_url,
       headers={"User-Agent": "wikiedits-api/0.1.0", "Accept": "application/json"},
@@ -90,12 +90,12 @@ class TestNewPages(unittest.TestCase):
     mock_response.json.return_value = {"items": [{"results": []}]}
     mock_response.raise_for_status = Mock()
     mock_get.return_value = mock_response
-    mock_validate.return_value = ("20240101", "20240102")
+    mock_validate.return_value = ("20250101", "20250102")
 
-    new_pages("en.wikipedia", "daily", "2024-01-01", "2024-01-02")
+    new_pages("en.wikipedia.org", "daily", "2025-01-01", "2025-01-02")
 
     self.assertEqual(mock_validate.call_count, 1)
-    mock_validate.assert_called_with("daily", "2024-01-01", "2024-01-02")
+    mock_validate.assert_called_with("daily", "2025-01-01", "2025-01-02")
 
 
 if __name__ == "__main__":
