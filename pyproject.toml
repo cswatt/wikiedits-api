@@ -45,7 +45,6 @@ Documentation = "https://github.com/cswatt/wikiedits-api#readme"
 dev = [
     "pytest>=6.0",
     "pytest-mock>=3.6.0",
-    "black>=22.0",
     "flake8>=4.0",
     "isort>=5.0",
     "mypy>=0.991",
@@ -58,26 +57,8 @@ version = {attr = "wikiedits.api.__version__"}
 [tool.setuptools.packages.find]
 include = ["wikiedits*"]
 
-[tool.black]
-line-length = 88
-target-version = ['py38']
-include = '\.pyi?$'
-extend-exclude = '''
-/(
-  # directories
-  \.eggs
-  | \.git
-  | \.hg
-  | \.mypy_cache
-  | \.tox
-  | \.venv
-  | build
-  | dist
-)/
-'''
 
 [tool.isort]
-profile = "black"
 multi_line_output = 3
 include_trailing_comma = true
 force_grid_wrap = 0
