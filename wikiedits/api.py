@@ -161,6 +161,9 @@ def edits_aggregate(
   editor_type: str = "all-editor-types",
   page_type: str = "all-page-types",
 ) -> List[Dict[str, Any]]:
+  """
+  Get number of edits.
+  """
   return _make_standard_request(
       "edits/aggregate", project, granularity, start, end, editor_type, page_type
   )
@@ -185,6 +188,9 @@ def edits_per_page(
   end: str,
   editor_type: str = "all-editor-types",
 ) -> List[Dict[str, Any]]:
+  """
+  Get number of edits to a page.
+  """
   return _make_per_page_request(
       "edits/per-page", project, page_title, granularity, start, end, editor_type
   )
@@ -209,6 +215,9 @@ def bytes_diff_net_aggregate(
   editor_type: str = "all-editor-types",
   page_type: str = "all-page-types",
 ) -> List[Dict[str, Any]]:
+  """
+  Get net byte changes (additions minus deletions).
+  """
   return _make_standard_request(
       "bytes-difference/net/aggregate",
       project,
@@ -228,6 +237,9 @@ def bytes_diff_per_page(
   end: str,
   editor_type: str = "all-editor-types",
 ) -> List[Dict[str, Any]]:
+  """
+  Get net byte changes (additions minus deletions) to a page.
+  """
   return _make_per_page_request(
       "bytes-difference/net/per-page",
       project,
@@ -247,6 +259,9 @@ def bytes_diff_abs_aggregate(
   editor_type: str = "all-editor-types",
   page_type: str = "all-page-types",
 ) -> List[Dict[str, Any]]:
+  """
+  Get absolute byte changes (additions plus deletions).
+  """
   return _make_standard_request(
       "bytes-difference/absolute/aggregate",
       project,
@@ -266,6 +281,9 @@ def bytes_diff_abs_per_page(
   end: str,
   editor_type: str = "all-editor-types",
 ) -> List[Dict[str, Any]]:
+  """
+  Get absolute byte changes (additions plus deletions) to a page.
+  """
   return _make_per_page_request(
       "bytes-difference/absolute/per-page",
       project,
@@ -285,6 +303,9 @@ def new_pages(
   editor_type: str = "all-editor-types",
   page_type: str = "all-page-types",
 ) -> List[Dict[str, Any]]:
+  """
+  Get number of new pages.
+  """
   return _make_standard_request(
       "edited-pages/new", project, granularity, start, end, editor_type, page_type
   )
@@ -310,6 +331,9 @@ def edited_pages(
   page_type: str = "all-page-types",
   activity_level: str = "all-activity-levels",
 ) -> List[Dict[str, object]]:
+  """
+  Get number of edited pages.
+  """
   start, end = validate_dates(granularity, start, end)
   args = (
       f"{project}/{editor_type}/{page_type}/{activity_level}/"
@@ -339,6 +363,9 @@ def top_by_net_diff(
   editor_type: str = "all-editor-types",
   page_type: str = "all-page-types",
 ) -> List[Dict[str, Any]]:
+  """
+  List most-edited pages by net byte change (additions minus deletions).
+  """
   return _make_top_by_request(
       "edited-pages/top-by-net-bytes-difference",
       project,
@@ -354,6 +381,9 @@ def top_by_abs_diff(
   editor_type: str = "all-editor-types",
   page_type: str = "all-page-types",
 ) -> List[Dict[str, Any]]:
+  """
+  List most-edited pages by absolute byte change (additions plus deletions).
+  """
   return _make_top_by_request(
       "edited-pages/top-by-absolute-bytes-difference",
       project,
@@ -369,6 +399,9 @@ def top_by_edits(
   editor_type: str = "all-editor-types",
   page_type: str = "all-page-types",
 ) -> List[Dict[str, Any]]:
+  """
+  List most-edited pages by number of edits.
+  """
   return _make_top_by_request(
       "edited-pages/top-by-edits", project, date, editor_type, page_type
   )
