@@ -8,7 +8,9 @@ This is a Python client library for Wikipedia editor analytics from the Wikimedi
 
 ## Development practices
 
-Use test-driven development.
+### Code style
+
+- Use 2-space indentation.
 
 ## Project Structure
 
