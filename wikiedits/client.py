@@ -1,6 +1,6 @@
 from typing import Any, Dict, List, Optional
 
-from .api import edits_aggregate, edits_per_page, bytes_diff_abs_aggregate, bytes_diff_abs_per_page, bytes_diff_net_aggregate, bytes_diff_net_per_page
+from .api import edits_aggregate, edits_per_page, bytes_diff_abs_aggregate, bytes_diff_abs_per_page, bytes_diff_net_aggregate, bytes_diff_net_per_page, new_pages, edited_pages
 
 
 def edits(
@@ -121,3 +121,54 @@ def bytes(
   # Sum the appropriate field based on diff_type
   field_name = "abs_bytes_diff" if diff_type == "absolute" else "net_bytes_diff"
   return sum(item[field_name] for item in response)
+
+def pages(
+  start: str,
+  end: str,
+  change_type: str = "edited",
+  project: str = "all-projects",
+  editor_type: str = "all-editor-types",
+  activity_level: str = "all-activity-levels",
+  page_type: str = "all-page-types"
+) -> int:
+  """
+  Get summed page counts for a project.
+  
+  Routes to either new_pages() or edited_pages() based on change_type.
+  Then sums results.
+  
+  Args:
+    start: Start date
+    end: End date  
+    change_type: Either "new" or "edited"
+    project: Domain and subdomain of Wikimedia project
+    editor_type: Editor type filter
+    page_type: Page type filter
+    
+  Returns:
+    Integer sum of page counts.
+  """
+
+  response = "";
+
+  if change_type == "new":
+    response = new_pages(
+      project=project,
+      granularity="daily",
+      start=start,
+      end=end,
+      editor_type=editor_type,
+      page_type=page_type,
+    )
+    return sum(item["new_pages"] for item in response)
+  else:  # change_type == "edited"
+    response = edited_pages(
+      project=project,
+      granularity="daily",
+      start=start,
+      end=end,
+      editor_type=editor_type,
+      page_type=page_type,
+      activity_level=activity_level,
+    )
+    return sum(item["edited_pages"] for item in response)
