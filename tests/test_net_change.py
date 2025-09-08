@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import Mock, patch
 
-from wikiedits.api import bytes_diff_net_aggregate, bytes_diff_per_page
+from wikiedits.api import bytes_diff_net_aggregate, bytes_diff_net_per_page
 
 
 class TestNetChange(unittest.TestCase):
@@ -68,7 +68,7 @@ class TestNetChange(unittest.TestCase):
     )
 
   @patch("wikiedits.api.requests.get")
-  def test_net_bytes_diff_per_page_basic(self, mock_get):
+  def test_net_bytes_diff_net_per_page_basic(self, mock_get):
     """Test basic net change per page functionality"""
     mock_response = Mock()
     mock_response.json.return_value = {
@@ -94,7 +94,7 @@ class TestNetChange(unittest.TestCase):
     mock_response.raise_for_status = Mock()
     mock_get.return_value = mock_response
 
-    result = bytes_diff_per_page(
+    result = bytes_diff_net_per_page(
       "en.wikipedia.org", "Python", "daily", "20250101", "20250102"
     )
 
@@ -107,14 +107,14 @@ class TestNetChange(unittest.TestCase):
     self.assertEqual(result[1]["net_bytes_diff"], -200)
 
   @patch("wikiedits.api.requests.get")
-  def test_net_bytes_diff_per_page_custom_parameters(self, mock_get):
+  def test_net_bytes_diff_net_per_page_custom_parameters(self, mock_get):
     """Test net change per page with custom parameters"""
     mock_response = Mock()
     mock_response.json.return_value = {"items": [{"results": []}]}
     mock_response.raise_for_status = Mock()
     mock_get.return_value = mock_response
 
-    bytes_diff_per_page(
+    bytes_diff_net_per_page(
       "es.wikipedia.org",
       "Machine_learning",
       "monthly",
@@ -140,7 +140,7 @@ class TestNetChange(unittest.TestCase):
     mock_validate.side_effect = [("20250101", "20250102"), ("20250101", "20250102")]
 
     bytes_diff_net_aggregate("en.wikipedia.org", "daily", "2025-01-01", "2025-01-02")
-    bytes_diff_per_page(
+    bytes_diff_net_per_page(
       "en.wikipedia.org", "Test_page", "daily", "2025-01-01", "2025-01-02"
     )
 

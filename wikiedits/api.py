@@ -229,7 +229,7 @@ def bytes_diff_net_aggregate(
   )
 
 
-def bytes_diff_per_page(
+def bytes_diff_net_per_page(
   project: str,
   page_title: str,
   granularity: str,
