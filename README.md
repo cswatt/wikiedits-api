@@ -16,57 +16,105 @@ cd wikiedits-api
 pip install -e .
 ```
 
-## Example usage
+## Usage
+
+On 3 December 2024, Yoon Suk Yeol attempted to declare martial law in the Republic of Korea. Between 3 December 2024 00:00 GMT and 4 December 2024 00:00 GMT, how many edits were made to the [English Wikipedia page about the ensuing political crisis](https://en.wikipedia.org/wiki/2024_South_Korean_martial_law_crisis)?
 
 ```python
 import wikiedits
 
-# Get edit counts for English Wikipedia in the last 30 days
-edits = wikiedits.edits_aggregate(
-    project="en.wikipedia.org",
-    granularity="daily",
-    start="2024-01-01",
-    end="2024-01-31"
-)
-
-print(edits)
+wikiedits.edits(
+  "20241203", 
+  "20241204", 
+  project="en.wikipedia.org",
+  page_title="2024_South_Korean_martial_law_crisis")
 ```
 
-## Date formats
+```
+713
+```
 
-The library accepts flexible date formats:
+During that same month, how many edits were made to the Korean-language Wikipedia project?
 
 ```python
-# YYYYMMDD format
-wikiedits.edits_aggregate("en.wikipedia.org", "daily", "20240101", "20240131")
-
-# ISO format
-wikiedits.edits_aggregate("en.wikipedia.org", "daily", "2024-01-01", "2024-01-31")
-
-# Human readable
-wikiedits.edits_aggregate("en.wikipedia.org", "daily", "January 1, 2024", "January 31, 2024")
+wikiedits.edits(
+  "20241201", 
+  "20241231", 
+  project="ko.wikipedia.org")
 ```
 
-## Error Handling
+```
+148092
+```
 
-The library provides informative error messages for common issues:
+On 4 December 2024, Michel Barnier became the first French prime minister to lose a vote of no-confidence since 1962. How much did the [English-language Michel Barnier page](https://en.wikipedia.org/wiki/Michel_Barnier) change between 4 December 2024 00:00 GMT and 5 December 2025 00:00 GMT?
+
+Net byte changes (additions minus deletions):
 
 ```python
-import wikiedits
-from requests.exceptions import RequestException
-
-try:
-    edits = wikiedits.edits_aggregate(
-        project="en.wikipedia.org",
-        granularity="daily",
-        start="invalid-date",
-        end="2024-01-31"
-    )
-except ValueError as e:
-    print(f"Date format error: {e}")
-except RequestException as e:
-    print(f"API request failed: {e}")
+wikiedits.bytes(
+  "20241204", 
+  "20241205",
+  diff_type="net",
+  project="en.wikipedia.org",
+  page_title="Michel_Barnier")
 ```
+
+```
+1627
+```
+
+Absolute byte changes (additions plus deletions):
+
+```python
+wikiedits.bytes(
+  "20241204", 
+  "20241205",
+  diff_type="absolute",
+  project="en.wikipedia.org",
+  page_title="Michel_Barnier")
+```
+
+```
+2247
+```
+
+How many pages received 100 or more edits in the English Wikipedia project in 2024?
+
+```python
+wikiedits.pages(
+  "20240101", 
+  "20241231",
+  change_type="edited",
+  project="en.wikipedia.org",
+  activity_level="100..-edits")
+```
+
+```
+5362
+```
+
+What were the 5 most edited articles (by number of edits) in the English Wikipedia project on New Year's Day 2025?
+
+```python
+wikiedits.top(
+  "20250101",
+  by="edits",
+  count=5,
+  page_type="content",
+  project="en.wikipedia.org")
+```
+
+```
+[{'page_title': '2025_New_Orleans_truck_attack', 'edits': 726, 'rank': 1}, 
+ {'page_title': 'Jimmy_Carter', 'edits': 113, 'rank': 2}, 
+ {'page_title': 'Islington_Handball_Club', 'edits': 102, 'rank': 3}, 
+ {'page_title': 'List_of_Saturday_Night_Live_writers', 'edits': 98, 'rank': 4}, 
+ {'page_title': '2025', 'edits': 87, 'rank': 5}]
+```
+
+See [docs/functions.md](docs/functions.md) for a complete list of functions and parameter details.
+
 
 ## Rate Limits
 

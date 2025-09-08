@@ -1,13 +1,13 @@
-# Function reference
+# Functions reference
 - [`edits`](#edits): How many edits have been made in a given time period
-- `bytes`: How much things have changed, in bytes, in a given time period
-- `pages`: How many pages have been added or modified in a given time period
-- `top`: Which pages have been changed the most
-- [Basic API wrappers](#basic-api-wrappers)
+- [`bytes`](#bytes): How much things have changed, in bytes, in a given time period
+- [`pages`](#pages): How many pages have been added or modified in a given time period
+- [`top`](#top): Which pages have been changed the most
+- [Basic API wrappers](#basic-api-wrappers): Wrapper functions for Wikimedia API endpoints
    - [`/edits/aggregate`](#edits_aggregate)
    - [`/edits/per-page`](#edits_per_page)
    - [`/bytes-difference/net/aggregate`](#bytes_diff_net_aggregate)
-   - [`/bytes-difference/net/per-page`](#bytes_diff_per_page)
+   - [`/bytes-difference/net/per-page`](#bytes_diff_net_per_page)
    - [`/bytes-difference/absolute/aggregate`](#bytes_diff_abs_aggregate)
    - [`/bytes-difference/absolute/per-page`](#bytes_diff_abs_per_page)
    - [`/edited-pages/new`](#new_pages)
@@ -18,7 +18,7 @@
 
 ### `edits`
 
-`edits(start, end, project='all-projects', page_title=None, editor_type='all-editor-types')`
+`wikiedits.edits(start, end, project='all-projects', page_title=None, editor_type='all-editor-types')`
 
 How many edits have been made between `start` and `end`?
 
@@ -34,40 +34,9 @@ How many edits have been made between `start` and `end`?
 
 </details>
 
-#### Examples
-
-On 3 December 2024, Yoon Suk Yeol attempted to declare martial law in the Republic of Korea. Between 3 December 2024 00:00 GMT and 4 December 2024 00:00 GMT, how many edits were made to the [English Wikipedia page about the ensuing political crisis](https://en.wikipedia.org/wiki/2024_South_Korean_martial_law_crisis)?
-
-```python
-import wikiedits
-
-wikiedits.edits("20241203", 
-                "20241204", 
-                project="en.wikipedia.org",
-                page_title="2024_South_Korean_martial_law_crisis")
-```
-
-```
-713
-```
-
-During that month, how many edits were made to the Korean-language Wikipedia project?
-
-```python
-import wikiedits
-
-wikiedits.edits("20241201", 
-                "20241231", 
-                project="ko.wikipedia.org")
-```
-
-```
-148092
-```
-
 ### `bytes`
 
-`bytes(start, end, diff_type='absolute', project='all-projects', page_title=None, editor_type='all-editor-types', page_type='all-page-types)`
+`wikiedits.bytes(start, end, diff_type='absolute', project='all-projects', page_title=None, editor_type='all-editor-types', page_type='all-page-types)`
 
 How many bytes have changed between `start` and `end`?
 
@@ -87,45 +56,9 @@ How many bytes have changed between `start` and `end`?
 
 </details>
 
-#### Examples
-
-On 4 December 2024, Michel Barnier became the first French prime minister to lose a vote of no-confidence since 1962. How much did the [English-language Michel Barnier page](https://en.wikipedia.org/wiki/Michel_Barnier) change between 4 December 2024 00:00 GMT and 5 December 2025 00:00 GMT?
-
-Net byte changes (additions minus deletions):
-
-```python
-import wikiedits
-
-wikiedits.bytes("20241204", 
-                "20241205",
-                diff_type="net",
-                project="en.wikipedia.org",
-                page_title="Michel_Barnier")
-```
-
-```
-1627
-```
-
-Absolute byte changes (additions plus deletions):
-
-```python
-import wikiedits
-
-wikiedits.bytes("20241204", 
-                "20241205",
-                diff_type="absolute",
-                project="en.wikipedia.org",
-                page_title="Michel_Barnier")
-```
-
-```
-2247
-```
-
 ### `pages`
 
-`pages(start, end, change_type='edited', project='all-projects', editor_type='all-editor-types', activity_level='all-activity-levels', page_type='all-page-types')`
+`wikiedits.pages(start, end, change_type='edited', project='all-projects', editor_type='all-editor-types', activity_level='all-activity-levels', page_type='all-page-types')`
 
 How many pages were created or edited between `start` and `end`?
 
@@ -146,39 +79,9 @@ How many pages were created or edited between `start` and `end`?
 
 </details>
 
-#### Examples
-
-How many new pages were created on New Year's Day 2025 by logged-in users in the English Wikipedia project?
-
-```python
-wikiedits.pages("20250101", 
-                "20250102",
-                change_type="new",
-                project="en.wikipedia.org",
-                editor_type="user")
-```
-
-```
-3920
-```
-
-How many pages received 100 or more edits iin the English Wikipedia project in 2024?
-
-```python
-wikiedits.pages("20240101", 
-                "20241231",
-                change_type="edited",
-                project="en.wikipedia.org",
-                activity_level="100..-edits")
-```
-
-```
-5362
-```
-
 ### `top`
 
-`top(date, by='edits', count=10, project='all-projects', editor_type='all-editor-types', page_type='all-page-types')`
+`wikiedits.top(date, by='edits', count=10, project='all-projects', editor_type='all-editor-types', page_type='all-page-types')`
 
 List most-edited pages for a given date.
 
@@ -197,26 +100,6 @@ List most-edited pages for a given date.
 
 </details>
 
-#### Examples
-
-What were the 5 most edited articles (by number of edits) in the English Wikipedia project on New Year's Day 2025?
-
-```python
-wikiedits.top("20250101",
-              by="edits",
-              count=5,
-              page_type="content",
-              project="en.wikipedia.org")
-```
-
-```
-[{'page_title': '2025_New_Orleans_truck_attack', 'edits': 726, 'rank': 1}, 
- {'page_title': 'Jimmy_Carter', 'edits': 113, 'rank': 2}, 
- {'page_title': 'Islington_Handball_Club', 'edits': 102, 'rank': 3}, 
- {'page_title': 'List_of_Saturday_Night_Live_writers', 'edits': 98, 'rank': 4}, 
- {'page_title': '2025', 'edits': 87, 'rank': 5}]
-```
-
 <hr>
 
 ### Basic API wrappers
@@ -225,7 +108,7 @@ Wrapper functions for all endpoints in the [Wikimedia Edit Analytics API](https:
 
 ### `edits_aggregate`
 
-`edits_aggregate(project, granularity, start, end, editor_type='all-editor-types', page_type='all-page-types')`
+`wikiedits.edits_aggregate(project, granularity, start, end, editor_type='all-editor-types', page_type='all-page-types')`
 
 Get number of edits.
 
@@ -245,7 +128,7 @@ Get number of edits.
 </details>
 
 ### edits_per_page
-`edits_per_page(project, page_title, granularity, start, end, editor_type='all-editor-types')`
+`wikiedits.edits_per_page(project, page_title, granularity, start, end, editor_type='all-editor-types')`
 
 Get number of edits to a page.
 
@@ -266,7 +149,7 @@ Get number of edits to a page.
 </details>
 
 ### bytes_diff_net_aggregate
-`bytes_diff_net_aggregate(project, granularity, start, end, editor_type='all-editor-types', page_type='all-page-types')`
+`wikiedits.bytes_diff_net_aggregate(project, granularity, start, end, editor_type='all-editor-types', page_type='all-page-types')`
 
 Get net byte changes (additions minus deletions).
 
@@ -285,9 +168,9 @@ Get net byte changes (additions minus deletions).
 
 </details>
 
-### bytes_diff_per_page
+### bytes_diff_net_per_page
 
-`bytes_diff_per_page(project, page_title, granularity, start, end, editor_type='all-editor-types')`
+`wikiedits.bytes_diff_net_per_page(project, page_title, granularity, start, end, editor_type='all-editor-types')`
 
 Get net byte changes (additions minus deletions) to a page.
 
@@ -308,7 +191,7 @@ Get net byte changes (additions minus deletions) to a page.
 </details>
 
 ### bytes_diff_abs_aggregate
-`bytes_diff_abs_aggregate(project, granularity, start, end, editor_type='all-editor-types', page_type='all-page-types')`
+`wikiedits.bytes_diff_abs_aggregate(project, granularity, start, end, editor_type='all-editor-types', page_type='all-page-types')`
 
 <details>
 <summary>Parameters</summary>
@@ -328,7 +211,7 @@ Get net byte changes (additions minus deletions) to a page.
 Get absolute byte changes (total additions + deletions).
 
 ### bytes_diff_abs_per_page
-`bytes_diff_abs_per_page(project, page_title, granularity, start, end, editor_type='all-editor-types')`
+`wikiedits.bytes_diff_abs_per_page(project, page_title, granularity, start, end, editor_type='all-editor-types')`
 
 Get absolute byte changes (additions + deletions) to a page.
 
@@ -349,7 +232,7 @@ Get absolute byte changes (additions + deletions) to a page.
 </details>
 
 ### new_pages
-`new_pages(project, granularity, start, end, editor_type='all-editor-types', page_type='all-page-types')`
+`wikiedits.new_pages(project, granularity, start, end, editor_type='all-editor-types', page_type='all-page-types')`
 
 Get number of new pages.
 
@@ -369,7 +252,7 @@ Get number of new pages.
 </details>
 
 ### edited_pages
-`edited_pages(project, granularity, start, end, editor_type='all-editor-types', page_type='all-page-types', activity_level='all-activity-levels')`
+`wikiedits.edited_pages(project, granularity, start, end, editor_type='all-editor-types', page_type='all-page-types', activity_level='all-activity-levels')`
 
 Get number of edited pages.
 
@@ -391,7 +274,7 @@ Get number of edited pages.
 </details>
 
 ### top_by_edits
-`top_by_edits(project, date, editor_type='all-editor-types', page_type='all-page-types')`
+`wikiedits.top_by_edits(project, date, editor_type='all-editor-types', page_type='all-page-types')`
 
 List most-edited pages by number of edits.
 
@@ -408,7 +291,7 @@ List most-edited pages by number of edits.
 </details>
 
 ### top_by_net_diff
-`top_by_net_diff(project, date, editor_type='all-editor-types', page_type='all-page-types')`
+`wikiedits.top_by_net_diff(project, date, editor_type='all-editor-types', page_type='all-page-types')`
 
 List most-edited pages by net byte change (additions minus deletions).
 
@@ -425,7 +308,7 @@ List most-edited pages by net byte change (additions minus deletions).
 </details>
 
 ### top_by_abs_diff
-`top_by_abs_diff(project, date, editor_type='all-editor-types', page_type='all-page-types')`
+`wikiedits.top_by_abs_diff(project, date, editor_type='all-editor-types', page_type='all-page-types')`
 
 List most-edited pages by absolute byte change (additions plus deletions).
 
