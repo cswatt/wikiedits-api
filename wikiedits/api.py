@@ -169,16 +169,6 @@ def edits_aggregate(
   )
 
 
-def sum_edits_aggregate(
-  project: str,
-  start: str,
-  end: str,
-  editor_type: str = "all-editor-types",
-  page_type: str = "all-page-types",
-) -> int:
-  response = edits_aggregate(project, "daily", start, end, editor_type, page_type)
-  return sum(item["edits"] for item in response)
-
 
 def edits_per_page(
   project: str,
@@ -195,16 +185,6 @@ def edits_per_page(
       "edits/per-page", project, page_title, granularity, start, end, editor_type
   )
 
-
-def sum_edits_per_page(
-  project: str,
-  page_title: str,
-  start: str,
-  end: str,
-  editor_type: str = "all-editor-types",
-) -> int:
-  response = edits_per_page(project, page_title, "daily", start, end, editor_type)
-  return sum(item["edits"] for item in response)
 
 
 def bytes_diff_net_aggregate(
@@ -311,16 +291,6 @@ def new_pages(
   )
 
 
-def sum_new_pages(
-  project: str,
-  start: str,
-  end: str,
-  editor_type: str = "all-editor-types",
-  page_type: str = "all-page-types",
-) -> int:
-  response = new_pages(project, "daily", start, end, editor_type, page_type)
-  return sum(item["new_pages"] for item in response)
-
 
 def edited_pages(
   project: str,
@@ -345,16 +315,6 @@ def edited_pages(
   return results
 
 
-def sum_edited_pages(
-  project: str,
-  start: str,
-  end: str,
-  editor_type: str = "all-editor-types",
-  page_type: str = "all-page-types",
-  activity_level: str = "all-activity-levels",
-) -> int:
-  response = edited_pages(project, "daily", start, end, editor_type, page_type)
-  return sum(cast(int, item["edited_pages"]) for item in response)
 
 
 def top_by_net_diff(
