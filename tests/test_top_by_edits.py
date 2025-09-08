@@ -10,40 +10,46 @@ class TestTopByEdits(unittest.TestCase):
     """Test basic top by edits functionality"""
     mock_response = Mock()
     mock_response.json.return_value = {
-      "items": [
-        {
-          "results": [
-            {
-              "top": [
-                {
-                  "project": "en.wikipedia.org",
-                  "page_title": "Python",
-                  "edits": 150,
-                  "rank": 1,
-                },
-                {
-                  "project": "en.wikipedia.org",
-                  "page_title": "JavaScript",
-                  "edits": 145,
-                  "rank": 2,
-                },
-              ]
-            }
-          ]
-        }
+    "items": [
+    {
+    "results": [
+    {
+      "top": [
+      {
+      "project": "en.wikipedia.org",
+      "page_title": "Python",
+      "edits": 150,
+      "rank": 1,
+      },
+      {
+      "project": "en.wikipedia.org",
+      "page_title": "JavaScript",
+      "edits": 145,
+      "rank": 2,
+      },
       ]
+    }
+    ]
+    }
+    ]
     }
     mock_response.raise_for_status = Mock()
     mock_get.return_value = mock_response
 
     result = top_by_edits("en.wikipedia.org", "20250315")
 
+    expected_url = (
+    "https://wikimedia.org/api/rest_v1/metrics/edited-pages/"
+    "top-by-edits/en.wikipedia.org/all-editor-types/all-page-types/"
+    "2025/03/15"
+    )
     mock_get.assert_called_once_with(
-      "https://wikimedia.org/api/rest_v1/metrics/edited-pages/"
-      "top-by-edits/en.wikipedia.org/all-editor-types/all-page-types/"
-      "2025/03/15",
-      headers={"User-Agent": "wikiedits-api/0.1.0", "Accept": "application/json"},
-      timeout=30,
+    expected_url,
+    headers={
+    "User-Agent": "wikiedits-api/0.1.0",
+    "Accept": "application/json"
+    },
+    timeout=30,
     )
     self.assertEqual(result[0]["edits"], 150)
     self.assertEqual(result[1]["edits"], 145)
@@ -57,13 +63,20 @@ class TestTopByEdits(unittest.TestCase):
     mock_get.return_value = mock_response
 
     top_by_edits(
-      "fr.wikipedia.org", "20250415", editor_type="user", page_type="content"
+    "fr.wikipedia.org", "20250415", editor_type="user", page_type="content"
     )
 
+    expected_url = (
+    "https://wikimedia.org/api/rest_v1/metrics/edited-pages/"
+    "top-by-edits/fr.wikipedia.org/user/content/2025/04/15"
+    )
     mock_get.assert_called_once_with(
-      "https://wikimedia.org/api/rest_v1/metrics/edited-pages/top-by-edits/fr.wikipedia.org/user/content/2025/04/15",
-      headers={"User-Agent": "wikiedits-api/0.1.0", "Accept": "application/json"},
-      timeout=30,
+    expected_url,
+    headers={
+    "User-Agent": "wikiedits-api/0.1.0",
+    "Accept": "application/json"
+    },
+    timeout=30,
     )
 
   @patch("wikiedits.api.requests.get")
@@ -76,11 +89,18 @@ class TestTopByEdits(unittest.TestCase):
 
     top_by_edits("es.wikipedia.org", "20250201")
 
-    expected_url = "https://wikimedia.org/api/rest_v1/metrics/edited-pages/top-by-edits/es.wikipedia.org/all-editor-types/all-page-types/2025/02/01"
+    expected_url = (
+    "https://wikimedia.org/api/rest_v1/metrics/edited-pages/"
+    "top-by-edits/es.wikipedia.org/all-editor-types/all-page-types/"
+    "2025/02/01"
+    )
     mock_get.assert_called_once_with(
-      expected_url,
-      headers={"User-Agent": "wikiedits-api/0.1.0", "Accept": "application/json"},
-      timeout=30,
+    expected_url,
+    headers={
+    "User-Agent": "wikiedits-api/0.1.0",
+    "Accept": "application/json"
+    },
+    timeout=30,
     )
 
   @patch("wikiedits.api.requests.get")
@@ -93,10 +113,18 @@ class TestTopByEdits(unittest.TestCase):
 
     top_by_edits("de.wikipedia.org", "2025-06-20")
 
+    expected_url = (
+    "https://wikimedia.org/api/rest_v1/metrics/edited-pages/"
+    "top-by-edits/de.wikipedia.org/all-editor-types/all-page-types/"
+    "2025/06/20"
+    )
     mock_get.assert_called_once_with(
-      "https://wikimedia.org/api/rest_v1/metrics/edited-pages/top-by-edits/de.wikipedia.org/all-editor-types/all-page-types/2025/06/20",
-      headers={"User-Agent": "wikiedits-api/0.1.0", "Accept": "application/json"},
-      timeout=30,
+    expected_url,
+    headers={
+    "User-Agent": "wikiedits-api/0.1.0",
+    "Accept": "application/json"
+    },
+    timeout=30,
     )
 
   @patch("wikiedits.api.requests.get")
@@ -109,10 +137,18 @@ class TestTopByEdits(unittest.TestCase):
 
     top_by_edits("it.wikipedia.org", "07/25/2025")
 
+    expected_url = (
+    "https://wikimedia.org/api/rest_v1/metrics/edited-pages/"
+    "top-by-edits/it.wikipedia.org/all-editor-types/all-page-types/"
+    "2025/07/25"
+    )
     mock_get.assert_called_once_with(
-      "https://wikimedia.org/api/rest_v1/metrics/edited-pages/top-by-edits/it.wikipedia.org/all-editor-types/all-page-types/2025/07/25",
-      headers={"User-Agent": "wikiedits-api/0.1.0", "Accept": "application/json"},
-      timeout=30,
+    expected_url,
+    headers={
+    "User-Agent": "wikiedits-api/0.1.0",
+    "Accept": "application/json"
+    },
+    timeout=30,
     )
 
   @patch("wikiedits.api.requests.get")
@@ -125,10 +161,18 @@ class TestTopByEdits(unittest.TestCase):
 
     top_by_edits("pt.wikipedia.org", "August 10, 2025")
 
+    expected_url = (
+    "https://wikimedia.org/api/rest_v1/metrics/edited-pages/"
+    "top-by-edits/pt.wikipedia.org/all-editor-types/all-page-types/"
+    "2025/08/10"
+    )
     mock_get.assert_called_once_with(
-      "https://wikimedia.org/api/rest_v1/metrics/edited-pages/top-by-edits/pt.wikipedia.org/all-editor-types/all-page-types/2025/08/10",
-      headers={"User-Agent": "wikiedits-api/0.1.0", "Accept": "application/json"},
-      timeout=30,
+    expected_url,
+    headers={
+    "User-Agent": "wikiedits-api/0.1.0",
+    "Accept": "application/json"
+    },
+    timeout=30,
     )
 
   @patch("wikiedits.api.split_date")
@@ -144,10 +188,18 @@ class TestTopByEdits(unittest.TestCase):
     top_by_edits("en.wikipedia.org", "2025-09-15")
 
     mock_split.assert_called_once_with("2025-09-15")
+    expected_url = (
+    "https://wikimedia.org/api/rest_v1/metrics/edited-pages/"
+    "top-by-edits/en.wikipedia.org/all-editor-types/all-page-types/"
+    "2025/09/15"
+    )
     mock_get.assert_called_once_with(
-      "https://wikimedia.org/api/rest_v1/metrics/edited-pages/top-by-edits/en.wikipedia.org/all-editor-types/all-page-types/2025/09/15",
-      headers={"User-Agent": "wikiedits-api/0.1.0", "Accept": "application/json"},
-      timeout=30,
+    expected_url,
+    headers={
+    "User-Agent": "wikiedits-api/0.1.0",
+    "Accept": "application/json"
+    },
+    timeout=30,
     )
 
   def test_top_by_edits_invalid_date(self):
@@ -175,3 +227,4 @@ class TestTopByEdits(unittest.TestCase):
 
 if __name__ == "__main__":
   unittest.main()
+

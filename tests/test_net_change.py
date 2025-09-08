@@ -10,36 +10,36 @@ class TestNetChange(unittest.TestCase):
     """Test basic net change aggregate functionality"""
     mock_response = Mock()
     mock_response.json.return_value = {
-      "items": [
-        {
-          "results": [
-            {
-              "project": "en.wikipedia.org",
-              "net_bytes_diff": 15000,
-              "timestamp": "20250101",
-            },
-            {
-              "project": "en.wikipedia.org",
-              "net_bytes_diff": 18000,
-              "timestamp": "20250102",
-            },
-          ]
-        }
-      ]
+    "items": [
+    {
+    "results": [
+    {
+      "project": "en.wikipedia.org",
+      "net_bytes_diff": 15000,
+      "timestamp": "20250101",
+    },
+    {
+      "project": "en.wikipedia.org",
+      "net_bytes_diff": 18000,
+      "timestamp": "20250102",
+    },
+    ]
+    }
+    ]
     }
     mock_response.raise_for_status = Mock()
     mock_get.return_value = mock_response
 
     result = bytes_diff_net_aggregate(
-      "en.wikipedia.org", "daily", "20250101", "20250102"
+    "en.wikipedia.org", "daily", "20250101", "20250102"
     )
 
     mock_get.assert_called_once_with(
-      "https://wikimedia.org/api/rest_v1/metrics/bytes-difference/"
-      "net/aggregate/en.wikipedia.org/all-editor-types/all-page-types/"
-      "daily/20250101/20250102",
-      headers={"User-Agent": "wikiedits-api/0.1.0", "Accept": "application/json"},
-      timeout=30,
+    "https://wikimedia.org/api/rest_v1/metrics/bytes-difference/"
+    "net/aggregate/en.wikipedia.org/all-editor-types/all-page-types/"
+    "daily/20250101/20250102",
+    headers={"User-Agent": "wikiedits-api/0.1.0", "Accept": "application/json"},
+    timeout=30,
     )
     self.assertEqual(result[0]["net_bytes_diff"], 15000)
     self.assertEqual(result[1]["net_bytes_diff"], 18000)
@@ -53,18 +53,18 @@ class TestNetChange(unittest.TestCase):
     mock_get.return_value = mock_response
 
     bytes_diff_net_aggregate(
-      "de.wikipedia.org",
-      "monthly",
-      "20250101",
-      "20250105",
-      editor_type="user",
-      page_type="content",
+    "de.wikipedia.org",
+    "monthly",
+    "20250101",
+    "20250105",
+    editor_type="user",
+    page_type="content",
     )
 
     mock_get.assert_called_once_with(
-      "https://wikimedia.org/api/rest_v1/metrics/bytes-difference/net/aggregate/de.wikipedia.org/user/content/monthly/20250101/20250105",
-      headers={"User-Agent": "wikiedits-api/0.1.0", "Accept": "application/json"},
-      timeout=30,
+    "https://wikimedia.org/api/rest_v1/metrics/bytes-difference/net/aggregate/de.wikipedia.org/user/content/monthly/20250101/20250105",
+    headers={"User-Agent": "wikiedits-api/0.1.0", "Accept": "application/json"},
+    timeout=30,
     )
 
   @patch("wikiedits.api.requests.get")
@@ -72,36 +72,36 @@ class TestNetChange(unittest.TestCase):
     """Test basic net change per page functionality"""
     mock_response = Mock()
     mock_response.json.return_value = {
-      "items": [
-        {
-          "results": [
-            {
-              "project": "en.wikipedia.org",
-              "page_title": "Python",
-              "net_bytes_diff": 500,
-              "timestamp": "20250101",
-            },
-            {
-              "project": "en.wikipedia.org",
-              "page_title": "Python",
-              "net_bytes_diff": -200,
-              "timestamp": "20250102",
-            },
-          ]
-        }
-      ]
+    "items": [
+    {
+    "results": [
+    {
+      "project": "en.wikipedia.org",
+      "page_title": "Python",
+      "net_bytes_diff": 500,
+      "timestamp": "20250101",
+    },
+    {
+      "project": "en.wikipedia.org",
+      "page_title": "Python",
+      "net_bytes_diff": -200,
+      "timestamp": "20250102",
+    },
+    ]
+    }
+    ]
     }
     mock_response.raise_for_status = Mock()
     mock_get.return_value = mock_response
 
     result = bytes_diff_net_per_page(
-      "en.wikipedia.org", "Python", "daily", "20250101", "20250102"
+    "en.wikipedia.org", "Python", "daily", "20250101", "20250102"
     )
 
     mock_get.assert_called_once_with(
-      "https://wikimedia.org/api/rest_v1/metrics/bytes-difference/net/per-page/en.wikipedia.org/Python/all-editor-types/daily/20250101/20250102",
-      headers={"User-Agent": "wikiedits-api/0.1.0", "Accept": "application/json"},
-      timeout=30,
+    "https://wikimedia.org/api/rest_v1/metrics/bytes-difference/net/per-page/en.wikipedia.org/Python/all-editor-types/daily/20250101/20250102",
+    headers={"User-Agent": "wikiedits-api/0.1.0", "Accept": "application/json"},
+    timeout=30,
     )
     self.assertEqual(result[0]["net_bytes_diff"], 500)
     self.assertEqual(result[1]["net_bytes_diff"], -200)
@@ -115,18 +115,18 @@ class TestNetChange(unittest.TestCase):
     mock_get.return_value = mock_response
 
     bytes_diff_net_per_page(
-      "es.wikipedia.org",
-      "Machine_learning",
-      "monthly",
-      "20250101",
-      "20250105",
-      editor_type="user",
+    "es.wikipedia.org",
+    "Machine_learning",
+    "monthly",
+    "20250101",
+    "20250105",
+    editor_type="user",
     )
 
     mock_get.assert_called_once_with(
-      "https://wikimedia.org/api/rest_v1/metrics/bytes-difference/net/per-page/es.wikipedia.org/Machine_learning/user/monthly/20250101/20250105",
-      headers={"User-Agent": "wikiedits-api/0.1.0", "Accept": "application/json"},
-      timeout=30,
+    "https://wikimedia.org/api/rest_v1/metrics/bytes-difference/net/per-page/es.wikipedia.org/Machine_learning/user/monthly/20250101/20250105",
+    headers={"User-Agent": "wikiedits-api/0.1.0", "Accept": "application/json"},
+    timeout=30,
     )
 
   @patch("wikiedits.api.validate_dates")
@@ -141,7 +141,7 @@ class TestNetChange(unittest.TestCase):
 
     bytes_diff_net_aggregate("en.wikipedia.org", "daily", "2025-01-01", "2025-01-02")
     bytes_diff_net_per_page(
-      "en.wikipedia.org", "Test_page", "daily", "2025-01-01", "2025-01-02"
+    "en.wikipedia.org", "Test_page", "daily", "2025-01-01", "2025-01-02"
     )
 
     self.assertEqual(mock_validate.call_count, 2)
@@ -149,3 +149,4 @@ class TestNetChange(unittest.TestCase):
 
 if __name__ == "__main__":
   unittest.main()
+

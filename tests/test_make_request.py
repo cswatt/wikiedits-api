@@ -17,10 +17,16 @@ class TestMakeRequest(unittest.TestCase):
 
     result = _make_request("test-endpoint", "test/args")
 
+    expected_url = (
+    "https://wikimedia.org/api/rest_v1/metrics/test-endpoint/test/args"
+    )
     mock_get.assert_called_once_with(
-      "https://wikimedia.org/api/rest_v1/metrics/test-endpoint/test/args",
-      headers={"User-Agent": "wikiedits-api/0.1.0", "Accept": "application/json"},
-      timeout=30,
+    expected_url,
+    headers={
+    "User-Agent": "wikiedits-api/0.1.0",
+    "Accept": "application/json"
+    },
+    timeout=30,
     )
     self.assertEqual(result, {"success": True, "data": "test"})
 
@@ -35,10 +41,14 @@ class TestMakeRequest(unittest.TestCase):
     custom_base = "https://custom-api.example.com/v1"
     result = _make_request("endpoint", "args", api_base_url=custom_base)
 
+    expected_url = "https://custom-api.example.com/v1/endpoint/args"
     mock_get.assert_called_once_with(
-      "https://custom-api.example.com/v1/endpoint/args",
-      headers={"User-Agent": "wikiedits-api/0.1.0", "Accept": "application/json"},
-      timeout=30,
+    expected_url,
+    headers={
+    "User-Agent": "wikiedits-api/0.1.0",
+    "Accept": "application/json"
+    },
+    timeout=30,
     )
     self.assertEqual(result, {"data": "custom"})
 
@@ -51,10 +61,10 @@ class TestMakeRequest(unittest.TestCase):
       _make_request("test-endpoint", "test/args")
 
     self.assertIn("Request timed out", str(context.exception))
-    self.assertIn(
-      "https://wikimedia.org/api/rest_v1/metrics/test-endpoint/test/args",
-      str(context.exception),
+    expected_url = (
+    "https://wikimedia.org/api/rest_v1/metrics/test-endpoint/test/args"
     )
+    self.assertIn(expected_url, str(context.exception))
 
   @patch("wikiedits.api.requests.get")
   def test_make_request_connection_error(self, mock_get):
@@ -65,10 +75,10 @@ class TestMakeRequest(unittest.TestCase):
       _make_request("test-endpoint", "test/args")
 
     self.assertIn("Failed to connect to API", str(context.exception))
-    self.assertIn(
-      "https://wikimedia.org/api/rest_v1/metrics/test-endpoint/test/args",
-      str(context.exception),
+    expected_url = (
+    "https://wikimedia.org/api/rest_v1/metrics/test-endpoint/test/args"
     )
+    self.assertIn(expected_url, str(context.exception))
 
   @patch("wikiedits.api.requests.get")
   def test_make_request_http_error(self, mock_get):
@@ -91,7 +101,7 @@ class TestMakeRequest(unittest.TestCase):
     mock_response = Mock()
     mock_response.raise_for_status = Mock()
     mock_response.json.side_effect = requests.exceptions.JSONDecodeError(
-      "msg", "doc", 0
+    "msg", "doc", 0
     )
     mock_get.return_value = mock_response
 
@@ -99,15 +109,16 @@ class TestMakeRequest(unittest.TestCase):
       _make_request("test-endpoint", "test/args")
 
     self.assertIn("Invalid JSON response", str(context.exception))
-    self.assertIn(
-      "https://wikimedia.org/api/rest_v1/metrics/test-endpoint/test/args",
-      str(context.exception),
+    expected_url = (
+    "https://wikimedia.org/api/rest_v1/metrics/test-endpoint/test/args"
     )
+    self.assertIn(expected_url, str(context.exception))
 
   @patch("wikiedits.api.requests.get")
   def test_make_request_generic_request_exception(self, mock_get):
     """Test generic request exception handling"""
-    mock_get.side_effect = requests.exceptions.RequestException("Generic error")
+    mock_get.side_effect = requests.exceptions.RequestException(
+    "Generic error")
 
     with self.assertRaises(requests.exceptions.RequestException) as context:
       _make_request("test-endpoint", "test/args")
@@ -118,3 +129,4 @@ class TestMakeRequest(unittest.TestCase):
 
 if __name__ == "__main__":
   unittest.main()
+

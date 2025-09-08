@@ -10,28 +10,28 @@ class TestTopByNetDiff(unittest.TestCase):
     """Test basic top by net diff functionality"""
     mock_response = Mock()
     mock_response.json.return_value = {
-      "items": [
-        {
-          "results": [
-            {
-              "top": [
-                {
-                  "project": "en.wikipedia.org",
-                  "page_title": "Python",
-                  "net_bytes_diff": 5000,
-                  "rank": 1,
-                },
-                {
-                  "project": "en.wikipedia.org",
-                  "page_title": "JavaScript",
-                  "net_bytes_diff": 4500,
-                  "rank": 2,
-                },
-              ]
-            }
-          ]
-        }
+    "items": [
+    {
+    "results": [
+    {
+      "top": [
+      {
+      "project": "en.wikipedia.org",
+      "page_title": "Python",
+      "net_bytes_diff": 5000,
+      "rank": 1,
+      },
+      {
+      "project": "en.wikipedia.org",
+      "page_title": "JavaScript",
+      "net_bytes_diff": 4500,
+      "rank": 2,
+      },
       ]
+    }
+    ]
+    }
+    ]
     }
     mock_response.raise_for_status = Mock()
     mock_get.return_value = mock_response
@@ -39,11 +39,11 @@ class TestTopByNetDiff(unittest.TestCase):
     result = top_by_net_diff("en.wikipedia.org", "20250315")
 
     mock_get.assert_called_once_with(
-      "https://wikimedia.org/api/rest_v1/metrics/edited-pages/"
-      "top-by-net-bytes-difference/en.wikipedia.org/all-editor-types/"
-      "all-page-types/2025/03/15",
-      headers={"User-Agent": "wikiedits-api/0.1.0", "Accept": "application/json"},
-      timeout=30,
+    "https://wikimedia.org/api/rest_v1/metrics/edited-pages/"
+    "top-by-net-bytes-difference/en.wikipedia.org/all-editor-types/"
+    "all-page-types/2025/03/15",
+    headers={"User-Agent": "wikiedits-api/0.1.0", "Accept": "application/json"},
+    timeout=30,
     )
     self.assertEqual(result[0]["net_bytes_diff"], 5000)
     self.assertEqual(result[1]["net_bytes_diff"], 4500)
@@ -57,13 +57,13 @@ class TestTopByNetDiff(unittest.TestCase):
     mock_get.return_value = mock_response
 
     top_by_net_diff(
-      "fr.wikipedia.org", "20250415", editor_type="user", page_type="content"
+    "fr.wikipedia.org", "20250415", editor_type="user", page_type="content"
     )
 
     mock_get.assert_called_once_with(
-      "https://wikimedia.org/api/rest_v1/metrics/edited-pages/top-by-net-bytes-difference/fr.wikipedia.org/user/content/2025/04/15",
-      headers={"User-Agent": "wikiedits-api/0.1.0", "Accept": "application/json"},
-      timeout=30,
+    "https://wikimedia.org/api/rest_v1/metrics/edited-pages/top-by-net-bytes-difference/fr.wikipedia.org/user/content/2025/04/15",
+    headers={"User-Agent": "wikiedits-api/0.1.0", "Accept": "application/json"},
+    timeout=30,
     )
 
   @patch("wikiedits.api.requests.get")
@@ -78,9 +78,9 @@ class TestTopByNetDiff(unittest.TestCase):
 
     expected_url = "https://wikimedia.org/api/rest_v1/metrics/edited-pages/top-by-net-bytes-difference/es.wikipedia.org/all-editor-types/all-page-types/2025/02/01"
     mock_get.assert_called_once_with(
-      expected_url,
-      headers={"User-Agent": "wikiedits-api/0.1.0", "Accept": "application/json"},
-      timeout=30,
+    expected_url,
+    headers={"User-Agent": "wikiedits-api/0.1.0", "Accept": "application/json"},
+    timeout=30,
     )
 
   @patch("wikiedits.api.requests.get")
@@ -94,9 +94,9 @@ class TestTopByNetDiff(unittest.TestCase):
     top_by_net_diff("de.wikipedia.org", "2025-06-20")
 
     mock_get.assert_called_once_with(
-      "https://wikimedia.org/api/rest_v1/metrics/edited-pages/top-by-net-bytes-difference/de.wikipedia.org/all-editor-types/all-page-types/2025/06/20",
-      headers={"User-Agent": "wikiedits-api/0.1.0", "Accept": "application/json"},
-      timeout=30,
+    "https://wikimedia.org/api/rest_v1/metrics/edited-pages/top-by-net-bytes-difference/de.wikipedia.org/all-editor-types/all-page-types/2025/06/20",
+    headers={"User-Agent": "wikiedits-api/0.1.0", "Accept": "application/json"},
+    timeout=30,
     )
 
   @patch("wikiedits.api.requests.get")
@@ -110,9 +110,9 @@ class TestTopByNetDiff(unittest.TestCase):
     top_by_net_diff("it.wikipedia.org", "07/25/2025")
 
     mock_get.assert_called_once_with(
-      "https://wikimedia.org/api/rest_v1/metrics/edited-pages/top-by-net-bytes-difference/it.wikipedia.org/all-editor-types/all-page-types/2025/07/25",
-      headers={"User-Agent": "wikiedits-api/0.1.0", "Accept": "application/json"},
-      timeout=30,
+    "https://wikimedia.org/api/rest_v1/metrics/edited-pages/top-by-net-bytes-difference/it.wikipedia.org/all-editor-types/all-page-types/2025/07/25",
+    headers={"User-Agent": "wikiedits-api/0.1.0", "Accept": "application/json"},
+    timeout=30,
     )
 
   @patch("wikiedits.api.requests.get")
@@ -126,9 +126,9 @@ class TestTopByNetDiff(unittest.TestCase):
     top_by_net_diff("pt.wikipedia.org", "August 10, 2025")
 
     mock_get.assert_called_once_with(
-      "https://wikimedia.org/api/rest_v1/metrics/edited-pages/top-by-net-bytes-difference/pt.wikipedia.org/all-editor-types/all-page-types/2025/08/10",
-      headers={"User-Agent": "wikiedits-api/0.1.0", "Accept": "application/json"},
-      timeout=30,
+    "https://wikimedia.org/api/rest_v1/metrics/edited-pages/top-by-net-bytes-difference/pt.wikipedia.org/all-editor-types/all-page-types/2025/08/10",
+    headers={"User-Agent": "wikiedits-api/0.1.0", "Accept": "application/json"},
+    timeout=30,
     )
 
   @patch("wikiedits.api.split_date")
@@ -145,9 +145,9 @@ class TestTopByNetDiff(unittest.TestCase):
 
     mock_split.assert_called_once_with("2025-09-15")
     mock_get.assert_called_once_with(
-      "https://wikimedia.org/api/rest_v1/metrics/edited-pages/top-by-net-bytes-difference/en.wikipedia.org/all-editor-types/all-page-types/2025/09/15",
-      headers={"User-Agent": "wikiedits-api/0.1.0", "Accept": "application/json"},
-      timeout=30,
+    "https://wikimedia.org/api/rest_v1/metrics/edited-pages/top-by-net-bytes-difference/en.wikipedia.org/all-editor-types/all-page-types/2025/09/15",
+    headers={"User-Agent": "wikiedits-api/0.1.0", "Accept": "application/json"},
+    timeout=30,
     )
 
   def test_top_by_net_diff_invalid_date(self):
@@ -175,3 +175,4 @@ class TestTopByNetDiff(unittest.TestCase):
 
 if __name__ == "__main__":
   unittest.main()
+
