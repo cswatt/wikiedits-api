@@ -19,13 +19,15 @@ from .api import (
 from .client import (
  edits,
  bytes,
- pages
+ pages,
+ top
 )
 
 __all__ = [
   "edits",
   "bytes",
   "pages",
+  "top",
   "edits_aggregate",
   "sum_edits_aggregate",
   "edits_per_page",

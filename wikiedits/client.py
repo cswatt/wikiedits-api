@@ -1,6 +1,6 @@
 from typing import Any, Dict, List, Optional
 
-from .api import edits_aggregate, edits_per_page, bytes_diff_abs_aggregate, bytes_diff_abs_per_page, bytes_diff_net_aggregate, bytes_diff_net_per_page, new_pages, edited_pages
+from .api import edits_aggregate, edits_per_page, bytes_diff_abs_aggregate, bytes_diff_abs_per_page, bytes_diff_net_aggregate, bytes_diff_net_per_page, new_pages, edited_pages, top_by_edits, top_by_net_diff, top_by_abs_diff
 
 
 def edits(
@@ -172,3 +172,55 @@ def pages(
       activity_level=activity_level,
     )
     return sum(item["edited_pages"] for item in response)
+
+def top(
+  date: str,
+  by: str = "edits",
+  count: int = 10,
+  project: str = "all-projects",
+  editor_type: str = "all-editor-types",
+  page_type: str = "all-page-types"
+) -> List[Dict[str, Any]]:
+  """
+  Get top pages for a project on a specific date.
+  
+  Routes to appropriate top_by_* function based on the 'by' parameter.
+  Returns the top 'count' results.
+  
+  Args:
+    date: Date in YYYY-MM-DD format
+    by: Metric to sort by - "edits", "net-diff", or "absolute-diff"
+    count: Number of results to return (1-100)
+    project: Domain and subdomain of Wikimedia project
+    editor_type: Editor type filter
+    page_type: Page type filter
+    
+  Returns:
+    List of dictionaries containing top pages data.
+  """
+
+  if by == "edits":
+    response = top_by_edits(
+      project=project,
+      date=date,
+      editor_type=editor_type,
+      page_type=page_type,
+    )
+  elif by == "net-diff":
+    response = top_by_net_diff(
+      project=project,
+      date=date,
+      editor_type=editor_type,
+      page_type=page_type,
+    )
+  elif by == "absolute-diff":
+    response = top_by_abs_diff(
+      project=project,
+      date=date,
+      editor_type=editor_type,
+      page_type=page_type,
+    )
+  else:
+    raise ValueError(f"Invalid 'by' parameter: {by}. Must be 'edits', 'net-diff', or 'absolute-diff'")
+
+  return response[:count]
