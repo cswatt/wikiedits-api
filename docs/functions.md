@@ -67,7 +67,7 @@ wikiedits.edits("20241201",
 
 ### `bytes`
 
-`edits(start, end, diff_type='absolute', project='all-projects', page_title=None, editor_type='all-editor-types', page_type='all-page-types)`
+`bytes(start, end, diff_type='absolute', project='all-projects', page_title=None, editor_type='all-editor-types', page_type='all-page-types)`
 
 How many bytes have changed between `start` and `end`?
 
@@ -123,6 +123,62 @@ wikiedits.bytes("20241204",
 2247
 ```
 
+### `pages`
+
+`pages(start, end, change_type='edited', project='all-projects', editor_type='all-editor-types', activity_level='all-activity-levels', page_type='all-page-types')`
+
+How many pages were created or edited between `start` and `end`?
+
+<details>
+<summary>Parameters</summary>
+
+- `start` (str, **required**): First day to include. YYYYMMDD, ISO format, or human-readable.
+- `end` (str, **required**): Last day to include. YYYYMMDD, ISO format, or human-readable.
+- `change_type` (str, _optional_, default: `edited`): Whether to ask for new or edited pages.
+   Allowed: `new`, `edited`
+- `project` (str, _optional_, default: `all-projects`): The Wikimedia project to look at, e.g. `en.wikipedia.org`, `all-wikipedia-projects`, `all-projects`.
+- `editor_type` (str, _optional_, default: `all-editor-types`): Type of editor.
+   Allowed: `all-editor-types`, `anonymous`, `group-bot` (registered accounts belonging to the bot group), `name-bot` (registered accounts with bot-like names), `user`
+- `activity_level` (str, _optional_, default: `all-activity-levels`): Editor activity range. If `change_type == "new"`, this value is ignored.
+   Allowed: `all-activity-levels`, `1..4-edits`, `5..24-edits`, `25..99-edits`, `100..-edits`
+- `page_type` (str, _optional_, default: `all-page-types`): Type of page. 
+   Allowed: `all-page-types`, `content` (articles), `non-content` (e.g. discussion pages)
+
+</details>
+
+#### Examples
+
+How many new pages were created on New Year's Day 2025 by logged-in users in the English Wikipedia project?
+
+```python
+wikiedits.pages("20250101", 
+                "20250102",
+                change_type="new",
+                project="en.wikipedia.org",
+                editor_type="user")
+```
+
+```
+3920
+```
+
+How many pages received 100 or more edits iin the English Wikipedia project in 2024?
+
+```python
+wikiedits.pages("20240101", 
+                "20241231",
+                change_type="edited",
+                project="en.wikipedia.org",
+                activity_level="100..-edits")
+```
+
+```
+5362
+```
+
+### `top`
+
+#### Examples
 
 ### Basic API wrappers
 
