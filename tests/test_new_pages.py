@@ -10,22 +10,22 @@ class TestNewPages(unittest.TestCase):
     """Test basic new pages functionality"""
     mock_response = Mock()
     mock_response.json.return_value = {
-    "items": [
-    {
-    "results": [
-    {
-      "project": "en.wikipedia.org",
-      "new_pages": 150,
-      "timestamp": "20250101",
-    },
-    {
-      "project": "en.wikipedia.org",
-      "new_pages": 175,
-      "timestamp": "20250102",
-    },
-    ]
-    }
-    ]
+      "items": [
+        {
+          "results": [
+            {
+              "project": "en.wikipedia.org",
+              "new_pages": 150,
+              "timestamp": "20250101",
+            },
+            {
+              "project": "en.wikipedia.org",
+              "new_pages": 175,
+              "timestamp": "20250102",
+            },
+          ]
+        }
+      ]
     }
     mock_response.raise_for_status = Mock()
     mock_get.return_value = mock_response
@@ -33,17 +33,17 @@ class TestNewPages(unittest.TestCase):
     result = new_pages("en.wikipedia.org", "daily", "20250101", "20250102")
 
     expected_url = (
-    "https://wikimedia.org/api/rest_v1/metrics/edited-pages/new/"
-    "en.wikipedia.org/all-editor-types/all-page-types/daily/"
-    "20250101/20250102"
+      "https://wikimedia.org/api/rest_v1/metrics/edited-pages/new/"
+      "en.wikipedia.org/all-editor-types/all-page-types/daily/"
+      "20250101/20250102"
     )
     mock_get.assert_called_once_with(
-    expected_url,
-    headers={
-    "User-Agent": "wikiedits-api/0.1.0",
-    "Accept": "application/json"
-    },
-    timeout=30,
+      expected_url,
+      headers={
+        "User-Agent": "wikiedits-api/0.1.0",
+        "Accept": "application/json"
+      },
+      timeout=30,
     )
     self.assertEqual(result[0]["new_pages"], 150)
     self.assertEqual(result[1]["new_pages"], 175)
@@ -57,25 +57,25 @@ class TestNewPages(unittest.TestCase):
     mock_get.return_value = mock_response
 
     new_pages(
-    "de.wikipedia.org",
-    "monthly",
-    "20250101",
-    "20250105",
-    editor_type="user",
-    page_type="content",
+      "de.wikipedia.org",
+      "monthly",
+      "20250101",
+      "20250105",
+      editor_type="user",
+      page_type="content",
     )
 
     expected_url = (
-    "https://wikimedia.org/api/rest_v1/metrics/edited-pages/new/"
-    "de.wikipedia.org/user/content/monthly/20250101/20250105"
+      "https://wikimedia.org/api/rest_v1/metrics/edited-pages/new/"
+      "de.wikipedia.org/user/content/monthly/20250101/20250105"
     )
     mock_get.assert_called_once_with(
-    expected_url,
-    headers={
-    "User-Agent": "wikiedits-api/0.1.0",
-    "Accept": "application/json"
-    },
-    timeout=30,
+      expected_url,
+      headers={
+        "User-Agent": "wikiedits-api/0.1.0",
+        "Accept": "application/json"
+      },
+      timeout=30,
     )
 
   @patch("wikiedits.api.requests.get")
@@ -89,17 +89,17 @@ class TestNewPages(unittest.TestCase):
     new_pages("fr.wikipedia.org", "daily", "20250201", "20250228")
 
     expected_url = (
-    "https://wikimedia.org/api/rest_v1/metrics/edited-pages/new/"
-    "fr.wikipedia.org/all-editor-types/all-page-types/daily/"
-    "20250201/20250228"
+      "https://wikimedia.org/api/rest_v1/metrics/edited-pages/new/"
+      "fr.wikipedia.org/all-editor-types/all-page-types/daily/"
+      "20250201/20250228"
     )
     mock_get.assert_called_once_with(
-    expected_url,
-    headers={
-    "User-Agent": "wikiedits-api/0.1.0",
-    "Accept": "application/json"
-    },
-    timeout=30,
+      expected_url,
+      headers={
+        "User-Agent": "wikiedits-api/0.1.0",
+        "Accept": "application/json"
+      },
+      timeout=30,
     )
 
   @patch("wikiedits.api.validate_dates")
@@ -120,4 +120,3 @@ class TestNewPages(unittest.TestCase):
 
 if __name__ == "__main__":
   unittest.main()
-

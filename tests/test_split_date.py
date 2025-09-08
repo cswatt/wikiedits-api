@@ -47,10 +47,10 @@ class TestSplitDate(unittest.TestCase):
   def test_split_date_yyyymmdd_edge_cases(self):
     """Test YYYYMMDD format with different months and days"""
     test_cases = [
-    ("20250101", ("2025", "01", "01")),
-    ("20251231", ("2025", "12", "31")),
-    ("20250630", ("2025", "06", "30")),
-    ("20250229", ("2025", "02", "29")),  # Leap year
+      ("20250101", ("2025", "01", "01")),
+      ("20251231", ("2025", "12", "31")),
+      ("20250630", ("2025", "06", "30")),
+      ("20250229", ("2025", "02", "29")),  # Leap year
     ]
 
     for date_input, expected in test_cases:
@@ -97,4 +97,3 @@ class TestSplitDate(unittest.TestCase):
 
 if __name__ == "__main__":
   unittest.main()
-
