@@ -1,5 +1,5 @@
 # Function reference
-- `edits`: How many edits have been made in a given time period
+- [`edits`](#edits): How many edits have been made in a given time period
 - `bytes`: How much things have changed, in bytes, in a given time period
 - `pages`: How many pages have been added or modified in a given time period
 - `top`: Which pages have been changed the most
@@ -28,7 +28,6 @@ How many edits have been made between `start` and `end`?
 - `start` (str, **required**): First day to include. YYYYMMDD, ISO format, or human-readable.
 - `end` (str, **required**): Last day to include. YYYYMMDD, ISO format, or human-readable.
 - `project` (str, _optional_, default: `all-projects`): The Wikimedia project to look at, e.g. `en.wikipedia.org`, `all-wikipedia-projects`, `all-projects`.
-   Defaults to `all-projects`.
 - `page_title` (str, _optional_, default: `None`): The title of a page. If not specified, looks at the whole project.
 - `editor_type` (str, _optional_, default: `all-editor-types`): Type of editor.
    Allowed: `all-editor-types`, `anonymous`, `group-bot` (registered accounts belonging to the bot group), `name-bot` (registered accounts with bot-like names), `user`
@@ -65,6 +64,65 @@ wikiedits.edits("20241201",
 ```
 148092
 ```
+
+### `bytes`
+
+`edits(start, end, diff_type='absolute', project='all-projects', page_title=None, editor_type='all-editor-types', page_type='all-page-types)`
+
+How many bytes have changed between `start` and `end`?
+
+<details>
+<summary>Parameters</summary>
+
+- `start` (str, **required**): First day to include. YYYYMMDD, ISO format, or human-readable.
+- `end` (str, **required**): Last day to include. YYYYMMDD, ISO format, or human-readable.
+- `diff_type` (str, _optional_, default: `absolute`): How to add up changes.
+   Allowed: `absolute` (additions plus deletions), `net` (additions minus deletions)
+- `project` (str, _optional_, default: `all-projects`): The Wikimedia project to look at, e.g. `en.wikipedia.org`, `all-wikipedia-projects`, `all-projects`.
+- `page_title` (str, _optional_, default: `None`): The title of a page. If not specified, looks at the whole project.
+- `editor_type` (str, _optional_, default: `all-editor-types`): Type of editor.
+   Allowed: `all-editor-types`, `anonymous`, `group-bot` (registered accounts belonging to the bot group), `name-bot` (registered accounts with bot-like names), `user`
+- `page_type` (str, _optional_, default: `all-page-types`): Type of page. If you specify `page_title`, this value is ignored.
+   Allowed: `all-page-types`, `content` (articles), `non-content` (e.g. discussion pages)
+
+</details>
+
+#### Examples
+
+On 4 December 2024, Michel Barnier became the first French prime minister to lose a vote of no-confidence since 1962. How much did the [English-language Michel Barnier page](https://en.wikipedia.org/wiki/Michel_Barnier) change between 4 December 2024 00:00 GMT and 5 December 2025 00:00 GMT?
+
+Net byte changes (additions minus deletions):
+
+```python
+import wikiedits
+
+wikiedits.bytes("20241204", 
+                "20241205",
+                diff_type="net",
+                project="en.wikipedia.org",
+                page_title="Michel_Barnier")
+```
+
+```
+1627
+```
+
+Absolute byte changes (additions plus deletions):
+
+```python
+import wikiedits
+
+wikiedits.bytes("20241204", 
+                "20241205",
+                diff_type="absolute",
+                project="en.wikipedia.org",
+                page_title="Michel_Barnier")
+```
+
+```
+2247
+```
+
 
 ### Basic API wrappers
 
