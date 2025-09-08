@@ -178,7 +178,46 @@ wikiedits.pages("20240101",
 
 ### `top`
 
+`top(date, by='edits', count=10, project='all-projects', editor_type='all-editor-types', page_type='all-page-types')`
+
+List most-edited pages for a given date.
+
+<details>
+<summary>Parameters</summary>
+
+- `date` (str, **required**): The date. YYYYMMDD, ISO format, or human-readable.
+- `by` (str, _optional_, default: `edits`): How to rank the top-edited pages.
+   Allowed: `edits`, `net-diff`, `absolute-diff`
+- `count` (int, _optional_, default: `10`): How many of the top results to return (1-100)
+- `project` (str, _optional_, default: `all-projects`): The Wikimedia project to look at, e.g. `en.wikipedia.org`, `all-wikipedia-projects`, `all-projects`.
+- `editor_type` (str, _optional_, default: `all-editor-types`): Type of editor.
+   Allowed: `all-editor-types`, `anonymous`, `group-bot` (registered accounts belonging to the bot group), `name-bot` (registered accounts with bot-like names), `user`
+- `page_type` (str, _optional_, default: `all-page-types`): Type of page. 
+   Allowed: `all-page-types`, `content` (articles), `non-content` (e.g. discussion pages)
+
+</details>
+
 #### Examples
+
+What were the 5 most edited articles (by number of edits) in the English Wikipedia project on New Year's Day 2025?
+
+```python
+wikiedits.top("20250101",
+              by="edits",
+              count=5,
+              page_type="content",
+              project="en.wikipedia.org")
+```
+
+```
+[{'page_title': '2025_New_Orleans_truck_attack', 'edits': 726, 'rank': 1}, 
+ {'page_title': 'Jimmy_Carter', 'edits': 113, 'rank': 2}, 
+ {'page_title': 'Islington_Handball_Club', 'edits': 102, 'rank': 3}, 
+ {'page_title': 'List_of_Saturday_Night_Live_writers', 'edits': 98, 'rank': 4}, 
+ {'page_title': '2025', 'edits': 87, 'rank': 5}]
+```
+
+<hr>
 
 ### Basic API wrappers
 
