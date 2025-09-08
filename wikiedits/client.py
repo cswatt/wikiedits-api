@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, cast
 
 from .api import (edits_aggregate, edits_per_page, bytes_diff_abs_aggregate,
                   bytes_diff_abs_per_page, bytes_diff_net_aggregate,
@@ -30,7 +30,7 @@ def edits(
     Integer sum of edit counts.
   """
 
-  response = ""
+  response: List[Dict[str, Any]]
 
   if page_title:
     response = edits_per_page(
@@ -50,7 +50,7 @@ def edits(
       editor_type=editor_type,
     )
 
-  return sum(item["edits"] for item in response)
+  return sum(cast(int, item["edits"]) for item in response)
 
 
 def bytes(
@@ -81,7 +81,7 @@ def bytes(
     Integer sum of byte difference counts.
   """
 
-  response = ""
+  response: List[Dict[str, Any]]
 
   if page_title:
     if diff_type == "absolute":
@@ -124,7 +124,7 @@ def bytes(
 
   # Sum the appropriate field based on diff_type
   field_name = "abs_bytes_diff" if diff_type == "absolute" else "net_bytes_diff"
-  return sum(item[field_name] for item in response)
+  return sum(cast(int, item[field_name]) for item in response)
 
 
 def pages(
@@ -154,7 +154,7 @@ def pages(
     Integer sum of page counts.
   """
 
-  response = ""
+  response: List[Dict[str, Any]]
 
   if change_type == "new":
     response = new_pages(
@@ -165,7 +165,7 @@ def pages(
       editor_type=editor_type,
       page_type=page_type,
     )
-    return sum(item["new_pages"] for item in response)
+    return sum(cast(int, item["new_pages"]) for item in response)
   else:  # change_type == "edited"
     response = edited_pages(
       project=project,
@@ -176,7 +176,7 @@ def pages(
       page_type=page_type,
       activity_level=activity_level,
     )
-    return sum(item["edited_pages"] for item in response)
+    return sum(cast(int, item["edited_pages"]) for item in response)
 
 
 def top(
