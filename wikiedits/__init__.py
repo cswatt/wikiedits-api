@@ -13,10 +13,10 @@ from .api import (
 )
 
 from .client import (
- edits,
- bytes,
- pages,
- top
+  edits,
+  bytes,
+  pages,
+  top
 )
 
 __all__ = [

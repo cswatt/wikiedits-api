@@ -21,36 +21,36 @@ def _make_request(
   Make HTTP request to Wikimedia API endpoint with error handling.
 
   Args:
-      endpoint: API endpoint path (e.g. 'edits/aggregate')
-      args: Formatted URL path arguments
-      api_base_url: Base URL for the API (defaults to Wikimedia REST API)
+    endpoint: API endpoint path (e.g. 'edits/aggregate')
+    args: Formatted URL path arguments
+    api_base_url: Base URL for the API (defaults to Wikimedia REST API)
 
   Returns:
-      dict: JSON response from the API
+    dict: JSON response from the API
 
   Raises:
-      requests.exceptions.RequestException: For all request-related errors
+    requests.exceptions.RequestException: For all request-related errors
   """
   # Construct full URL by joining base URL, endpoint, and arguments
   url = "/".join([api_base_url, endpoint, args])
 
   try:
-      # Make GET request with default headers and 30 second timeout
-      response = requests.get(url, headers=DEFAULT_HEADERS, timeout=30)
-      response.raise_for_status()  # Raise exception for HTTP error status codes
-      return cast(Dict[str, object], response.json())
+    # Make GET request with default headers and 30 second timeout
+    response = requests.get(url, headers=DEFAULT_HEADERS, timeout=30)
+    response.raise_for_status()  # Raise exception for HTTP error status codes
+    return cast(Dict[str, object], response.json())
   except requests.exceptions.Timeout:
-      raise requests.exceptions.RequestException(f"Request timed out for URL: {url}")
+    raise requests.exceptions.RequestException(f"Request timed out for URL: {url}")
   except requests.exceptions.ConnectionError:
-      raise requests.exceptions.RequestException(f"Failed to connect to API: {url}")
+    raise requests.exceptions.RequestException(f"Failed to connect to API: {url}")
   except requests.exceptions.HTTPError:
-      raise requests.exceptions.RequestException(
+    raise requests.exceptions.RequestException(
       f"HTTP error {response.status_code}: {response.text}"
-      )
+    )
   except requests.exceptions.JSONDecodeError:
-      raise requests.exceptions.RequestException(f"Invalid JSON response from: {url}")
+    raise requests.exceptions.RequestException(f"Invalid JSON response from: {url}")
   except requests.exceptions.RequestException as e:
-      raise requests.exceptions.RequestException(f"Request failed: {str(e)}")
+    raise requests.exceptions.RequestException(f"Request failed: {str(e)}")
 
 
 def _build_standard_args(
@@ -104,7 +104,7 @@ def _make_standard_request(
   """
   start, end = validate_dates(granularity, start, end)
   args = _build_standard_args(
-      project, editor_type, page_type, granularity, start, end
+    project, editor_type, page_type, granularity, start, end
   )
   response = _make_request(endpoint, args)
   items = cast(List[Dict[str, Any]], response["items"])
@@ -126,7 +126,7 @@ def _make_per_page_request(
   """
   start, end = validate_dates(granularity, start, end)
   args = _build_per_page_args(
-      project, page_title, editor_type, granularity, start, end
+    project, page_title, editor_type, granularity, start, end
   )
   response = _make_request(endpoint, args)
   items = cast(List[Dict[str, Any]], response["items"])
@@ -165,9 +165,8 @@ def edits_aggregate(
   Get number of edits.
   """
   return _make_standard_request(
-      "edits/aggregate", project, granularity, start, end, editor_type, page_type
+    "edits/aggregate", project, granularity, start, end, editor_type, page_type
   )
-
 
 
 def edits_per_page(
@@ -182,9 +181,8 @@ def edits_per_page(
   Get number of edits to a page.
   """
   return _make_per_page_request(
-      "edits/per-page", project, page_title, granularity, start, end, editor_type
+    "edits/per-page", project, page_title, granularity, start, end, editor_type
   )
-
 
 
 def bytes_diff_net_aggregate(
@@ -199,13 +197,13 @@ def bytes_diff_net_aggregate(
   Get net byte changes (additions minus deletions).
   """
   return _make_standard_request(
-      "bytes-difference/net/aggregate",
-      project,
-      granularity,
-      start,
-      end,
-      editor_type,
-      page_type,
+    "bytes-difference/net/aggregate",
+    project,
+    granularity,
+    start,
+    end,
+    editor_type,
+    page_type,
   )
 
 
@@ -221,13 +219,13 @@ def bytes_diff_net_per_page(
   Get net byte changes (additions minus deletions) to a page.
   """
   return _make_per_page_request(
-      "bytes-difference/net/per-page",
-      project,
-      page_title,
-      granularity,
-      start,
-      end,
-      editor_type,
+    "bytes-difference/net/per-page",
+    project,
+    page_title,
+    granularity,
+    start,
+    end,
+    editor_type,
   )
 
 
@@ -243,13 +241,13 @@ def bytes_diff_abs_aggregate(
   Get absolute byte changes (additions plus deletions).
   """
   return _make_standard_request(
-      "bytes-difference/absolute/aggregate",
-      project,
-      granularity,
-      start,
-      end,
-      editor_type,
-      page_type,
+    "bytes-difference/absolute/aggregate",
+    project,
+    granularity,
+    start,
+    end,
+    editor_type,
+    page_type,
   )
 
 
@@ -265,13 +263,13 @@ def bytes_diff_abs_per_page(
   Get absolute byte changes (additions plus deletions) to a page.
   """
   return _make_per_page_request(
-      "bytes-difference/absolute/per-page",
-      project,
-      page_title,
-      granularity,
-      start,
-      end,
-      editor_type,
+    "bytes-difference/absolute/per-page",
+    project,
+    page_title,
+    granularity,
+    start,
+    end,
+    editor_type,
   )
 
 
@@ -287,9 +285,8 @@ def new_pages(
   Get number of new pages.
   """
   return _make_standard_request(
-      "edited-pages/new", project, granularity, start, end, editor_type, page_type
+    "edited-pages/new", project, granularity, start, end, editor_type, page_type
   )
-
 
 
 def edited_pages(
@@ -306,15 +303,13 @@ def edited_pages(
   """
   start, end = validate_dates(granularity, start, end)
   args = (
-      f"{project}/{editor_type}/{page_type}/{activity_level}/"
-      f"{granularity}/{start}/{end}"
+    f"{project}/{editor_type}/{page_type}/{activity_level}/"
+    f"{granularity}/{start}/{end}"
   )
   response = _make_request("edited-pages/aggregate", args)
   items = cast(List[Dict[str, Any]], response["items"])
   results = cast(List[Dict[str, object]], items[0]["results"])
   return results
-
-
 
 
 def top_by_net_diff(
@@ -327,11 +322,11 @@ def top_by_net_diff(
   List most-edited pages by net byte change (additions minus deletions).
   """
   return _make_top_by_request(
-      "edited-pages/top-by-net-bytes-difference",
-      project,
-      date,
-      editor_type,
-      page_type,
+    "edited-pages/top-by-net-bytes-difference",
+    project,
+    date,
+    editor_type,
+    page_type,
   )
 
 
@@ -345,11 +340,11 @@ def top_by_abs_diff(
   List most-edited pages by absolute byte change (additions plus deletions).
   """
   return _make_top_by_request(
-      "edited-pages/top-by-absolute-bytes-difference",
-      project,
-      date,
-      editor_type,
-      page_type,
+    "edited-pages/top-by-absolute-bytes-difference",
+    project,
+    date,
+    editor_type,
+    page_type,
   )
 
 
@@ -363,5 +358,5 @@ def top_by_edits(
   List most-edited pages by number of edits.
   """
   return _make_top_by_request(
-      "edited-pages/top-by-edits", project, date, editor_type, page_type
+    "edited-pages/top-by-edits", project, date, editor_type, page_type
   )
