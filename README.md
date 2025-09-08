@@ -140,6 +140,13 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Claude Code workflow
 
+### Test-driven development (TDD)
+1. As the human, use `/write-test` and describe the new function of your dreams. Review this test and make sure it's doing what you want.
+2. Use `/write-fn` for a basic implementation.
+3. Refactor function.
+
 ### Slash commands
 
--`/rename-fn <old> <new>`: Renames a function across the project.
+- `/rename-fn <old> <new>`: Renames a function across the project.
+- `/write-test <new_function_description>`: Following TDD, first write a test for a new function.
+- `/write-fn <test_file>`: After writing a test for a new function, have Claude Code implement the function. 
